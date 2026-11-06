@@ -94,6 +94,9 @@ textarea {
   letter-spacing: -0.01em;
   color: #201713;
 }
+.wordmark-name {
+  display: inline;
+}
 .wordmark small {
   display: block;
   font-family: var(--sans) !important;
