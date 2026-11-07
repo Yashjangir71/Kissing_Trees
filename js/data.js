@@ -6,7 +6,7 @@
 // ============================================================
 const SITE = {
   name: "Kissing Trees",
-  tagline: "A Private Cottage Homestay for Families & Couples",
+  tagline: "A Private Cottage Homestay for Families, Artists & Travelers",
   location: "Near Dornahalli, KR Nagar, Mysuru district, Karnataka",
   nearbyLandscape: "10 km cycling track to the KRS backwaters",
   whatsapp: "919256725871",
@@ -45,7 +45,7 @@ const SITE = {
   const replacements = [
     ["Kissing Trees", SITE.name],
     ["Kissing Tree", SITE.name],
-    ["A Private Cottage Homestay for Families & Couples", SITE.tagline],
+    ["A Private Cottage Homestay for Families, Artists & Travelers", SITE.tagline],
   ];
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   let node;

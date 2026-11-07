@@ -7,7 +7,7 @@
 //            -> polite block message, form stops, NO payment ever.
 //  REVIEW  : any other all-adult-male case (incl. solo male)
 //            -> request may be sent, but flagged MANUAL REVIEW for owner.
-//  ALLOWED : family / married couple / women's group / mixed family
+//  ALLOWED : family / artists / travelers / office & remote work / women's group / mixed family
 //            -> request sent for owner approval (Layer 3 still applies:
 //               payment link ONLY after owner approves — for everyone).
 // Declaration checkbox is enforced by the form before this is called.
@@ -49,7 +49,7 @@ function classifyBooking(input) {
       status: "BLOCKED",
       reason: "All-male group of 2+ with party purpose.",
       message:
-        "Thank you for your interest. Kissing Trees is reserved only for families and couples, so we're unable to host bachelor / stag groups. We hope you find a place that fits your trip better.",
+        "Thank you for your interest. Kissing Trees is reserved for families, artists, travelers, and working professionals, so we're unable to host bachelor / stag groups. We hope you find a place that fits your trip better.",
     };
   }
 
