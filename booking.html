@@ -185,19 +185,92 @@
               <label>
                 ID type of main guest
                 <span class="label-soft">(ID checked at check-in)</span>
-                <select id="gid">
+                <select id="gid" required>
+                  <option value="">Select ID type</option>
+                  <option>Company ID / Corporate ID</option>
                   <option>Passport</option>
                   <option>Driving Licence</option>
                   <option>Voter ID</option>
+                  <option>Aadhaar / National ID</option>
                   <option>Other valid photo ID</option>
                 </select>
               </label>
+
+              <div class="id-upload-section">
+                <div class="id-upload-header">
+                  <span class="id-upload-title">ID Photo Verification</span>
+                  <span class="label-soft">Upload from browser or capture with camera</span>
+                </div>
+                
+                <div class="id-upload-flow" id="idUploadFlow">
+                  <!-- Main ID Photo Card (Front) -->
+                  <div class="id-upload-card" id="idFrontCard">
+                    <div class="id-card-header">
+                      <span class="id-card-badge" id="idFrontBadge">ID PHOTO</span>
+                      <span class="id-card-status" id="idFrontStatus">Not added</span>
+                    </div>
+                    <div class="id-preview-box" id="idFrontPreviewBox">
+                      <div class="id-placeholder" id="idFrontPlaceholder">
+                        <span class="id-placeholder-icon">🪪</span>
+                        <span>Take a photo or browse ID document</span>
+                      </div>
+                      <img id="idFrontImg" alt="ID preview" class="id-img-preview" hidden />
+                    </div>
+                    <div class="id-upload-actions">
+                      <label class="id-action-btn camera-btn" title="Take photo using camera">
+                        <span>📷 Capture</span>
+                        <input type="file" id="idFrontCameraInput" accept="image/*" capture="environment" class="visually-hidden-file" />
+                      </label>
+                      <label class="id-action-btn" title="Browse files from device">
+                        <span>📁 Browse</span>
+                        <input type="file" id="idFrontFileInput" accept="image/*" class="visually-hidden-file" />
+                      </label>
+                      <button type="button" id="idFrontRemoveBtn" class="id-remove-btn" hidden>Remove</button>
+                    </div>
+                  </div>
+
+                  <!-- "+ Add Back Side" Trigger Button (Appears only after front photo is uploaded) -->
+                  <div class="id-add-back-wrapper" id="idAddBackWrapper" hidden>
+                    <button type="button" class="id-add-back-btn" id="idAddBackBtn">
+                      <span class="plus-icon">+</span>
+                      <span>Add back side of ID (Optional)</span>
+                    </button>
+                  </div>
+
+                  <!-- Back Side Photo Card (Revealed when "+ Add back side" is clicked) -->
+                  <div class="id-upload-card id-back-card" id="idBackCard" hidden>
+                    <div class="id-card-header">
+                      <span class="id-card-badge">BACK SIDE</span>
+                      <span class="id-card-status" id="idBackStatus">Not added</span>
+                    </div>
+                    <div class="id-preview-box" id="idBackPreviewBox">
+                      <div class="id-placeholder" id="idBackPlaceholder">
+                        <span class="id-placeholder-icon">🔄</span>
+                        <span>Back of ID card</span>
+                      </div>
+                      <img id="idBackImg" alt="Back ID preview" class="id-img-preview" hidden />
+                    </div>
+                    <div class="id-upload-actions">
+                      <label class="id-action-btn camera-btn" title="Take photo using camera">
+                        <span>📷 Capture</span>
+                        <input type="file" id="idBackCameraInput" accept="image/*" capture="environment" class="visually-hidden-file" />
+                      </label>
+                      <label class="id-action-btn" title="Browse files from device">
+                        <span>📁 Browse</span>
+                        <input type="file" id="idBackFileInput" accept="image/*" class="visually-hidden-file" />
+                      </label>
+                      <button type="button" id="idBackCancelBtn" class="id-remove-btn">Cancel / Remove</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div class="privacy-note">
                 <span>i</span>
                 <p>
-                  We don’t collect ID numbers here. At check-in, IDs must match
-                  the approved guest list. A refundable security deposit
-                  applies. No parties or outside guests.
+                  ID photos are shared directly with the owner solely to verify
+                  your stay request before confirmation. At check-in, original
+                  physical IDs must match the approved guest list.
                 </p>
               </div>
               <button class="button form-next" type="submit">

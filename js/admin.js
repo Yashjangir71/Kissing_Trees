@@ -42,7 +42,7 @@ const seed = () => [
     name: "Sample Solo Guest",
     phone: "SAMPLE contact",
     guests: "Sample solo guest name and age",
-    idType: "Passport",
+    idType: "Company ID / Corporate ID",
     ownerStatus: "PENDING OWNER APPROVAL",
   },
 ];
@@ -83,7 +83,21 @@ function render() {
       .map(
         (r, i) => `<tr>
     <td><b>${escapeHTML(r.id)}</b><br><span class="small">${escapeHTML(r.time)}</span></td>
-    <td><b>${escapeHTML(r.name)}</b><br><span class="small">${escapeHTML(r.phone)}<br>${escapeHTML(r.guests)}</span></td>
+    <td>
+      <b>${escapeHTML(r.name)}</b><br>
+      <span class="small">${escapeHTML(r.phone)}<br>${escapeHTML(r.guests)}</span>
+      <div style="margin-top:6px;font-size:11px;color:#55483f;">
+        <strong>ID:</strong> ${escapeHTML(r.idType || "Not specified")}
+      </div>
+      ${
+        r.idFront || r.idBack
+          ? `<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
+            ${r.idFront ? `<button type="button" class="id-thumb-btn" onclick="viewIdModal('${escapeHTML(r.id)}','front')">📷 Front ID</button>` : ""}
+            ${r.idBack ? `<button type="button" class="id-thumb-btn" onclick="viewIdModal('${escapeHTML(r.id)}','back')">📷 Back ID</button>` : ""}
+          </div>`
+          : ""
+      }
+    </td>
     <td>${escapeHTML(r.guestType)}<br><span class="small">Men ${escapeHTML(r.men)} • Women ${escapeHTML(r.women)} • Children ${escapeHTML(r.children)}<br>${escapeHTML(r.purpose)}</span></td>
     <td>${escapeHTML(r.checkin)} → ${escapeHTML(r.checkout)}</td>
     <td><span class="chip ${r.gateStatus === "ALLOWED" ? "a" : "r"}">${escapeHTML(r.gateStatus)}</span></td>
@@ -140,3 +154,42 @@ document.getElementById("clearBtn").addEventListener("click", () => {
   }
 });
 if (sessionStorage.getItem(authKey) === "demo-authenticated") showPanel();
+
+// ID Document Photo Viewer Modal
+window.viewIdModal = function (id, side) {
+  const all = load();
+  const req = all.find((item) => item.id === id);
+  if (!req) return;
+  const dataUrl = side === "front" ? req.idFront : req.idBack;
+  if (!dataUrl) {
+    alert("No photo available for this side.");
+    return;
+  }
+
+  const modal = document.getElementById("idModal");
+  const modalImg = document.getElementById("idModalImg");
+  const modalTitle = document.getElementById("idModalTitle");
+
+  if (modalTitle) {
+    modalTitle.textContent = `${req.name} — ${side === "front" ? "Front" : "Back"} Photo (${req.idType || "ID"})`;
+  }
+  if (modalImg) modalImg.src = dataUrl;
+  if (modal) modal.hidden = false;
+};
+
+const idModal = document.getElementById("idModal");
+if (idModal) {
+  const closeBtn = document.getElementById("idModalCloseBtn");
+  const closeModal = () => {
+    idModal.hidden = true;
+    const modalImg = document.getElementById("idModalImg");
+    if (modalImg) modalImg.src = "";
+  };
+  if (closeBtn) closeBtn.addEventListener("click", closeModal);
+  idModal.addEventListener("click", (e) => {
+    if (e.target === idModal) closeModal();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !idModal.hidden) closeModal();
+  });
+}
