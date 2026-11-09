@@ -85,13 +85,3 @@ if (galleryLightbox) {
     if (event.key === "Escape" && !galleryLightbox.hidden) closeLightbox();
   });
 }
-
-const brandWalker = document.createTreeWalker(
-  document.body,
-  NodeFilter.SHOW_TEXT,
-);
-let brandNode;
-while ((brandNode = brandWalker.nextNode())) {
-  brandNode.nodeValue = brandNode.nodeValue.replace(/Trees{2}/g, "Trees");
-}
-document.title = document.title.replace(/Trees{2}/g, "Trees");
