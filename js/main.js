@@ -33,22 +33,18 @@ setText("contactWhatsApp", SITE.whatsapp);
 setText("contactEmail", SITE.email);
 setText("bookingContact", "Owner WhatsApp: " + SITE.whatsapp);
 
-document.querySelectorAll(".faq-list details").forEach((item) => {
-  item.addEventListener("mouseenter", () => {
-    item.open = true;
+// On devices with fine hover (mouse), allow gentle hover preview.
+// Do not trap focusin/focusout so mobile touch toggles naturally without lock.
+if (window.matchMedia("(hover: hover)").matches) {
+  document.querySelectorAll(".faq-list details").forEach((item) => {
+    item.addEventListener("mouseenter", () => {
+      item.open = true;
+    });
+    item.addEventListener("mouseleave", () => {
+      if (!item.matches(":focus-within")) item.open = false;
+    });
   });
-  item.addEventListener("mouseleave", () => {
-    if (!item.matches(":focus-within")) item.open = false;
-  });
-  item.addEventListener("focusin", () => {
-    item.open = true;
-  });
-  item.addEventListener("focusout", () => {
-    if (!item.matches(":hover") && !item.matches(":focus-within")) {
-      item.open = false;
-    }
-  });
-});
+}
 
 const galleryLightbox = document.getElementById("galleryLightbox");
 if (galleryLightbox) {

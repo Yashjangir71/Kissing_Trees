@@ -43,21 +43,114 @@ const SITE = {
 (function () {
   if (!document.body) return;
   const replacements = [
-    ["Kissing Trees", SITE.name],
-    ["Kissing Tree", SITE.name],
-    ["A Private Cottage Homestay for Families, Artists & Travelers", SITE.tagline],
+    [/\bKissing Trees\b/g, SITE.name],
+    [/\bKissing Tree\b/g, SITE.name],
+    [/\bA Private Cottage Homestay for Families, Artists & Travelers\b/g, SITE.tagline],
   ];
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   let node;
   while ((node = walker.nextNode())) {
     let text = node.nodeValue;
-    for (const [from, to] of replacements) text = text.split(from).join(to);
+    for (const [pattern, to] of replacements) text = text.replace(pattern, to);
+    text = text.replace(/Kissing Trees{2,}/g, "Kissing Trees");
     node.nodeValue = text;
   }
-  for (const [from, to] of replacements)
-    document.title = document.title.split(from).join(to);
+  for (const [pattern, to] of replacements)
+    document.title = document.title.replace(pattern, to);
+  document.title = document.title.replace(/Kissing Trees{2,}/g, "Kissing Trees");
 
   if (!document.body.classList.contains("admin-page")) {
+    const topbar = document.querySelector(".topbar");
+    if (topbar && !topbar.querySelector(".mobile-nav-actions")) {
+      const isBookingPage = window.location.pathname.endsWith("booking.html") || window.location.href.includes("booking.html");
+      const navActions = document.createElement("div");
+      navActions.className = "mobile-nav-actions";
+
+      if (!isBookingPage) {
+        const bookPill = document.createElement("a");
+        bookPill.className = "mobile-book-pill";
+        bookPill.href = "booking.html";
+        bookPill.innerHTML = `Book <span>↗</span>`;
+        navActions.appendChild(bookPill);
+      }
+
+      const menuBtn = document.createElement("button");
+      menuBtn.type = "button";
+      menuBtn.className = "mobile-menu-toggle";
+      menuBtn.setAttribute("aria-label", "Toggle navigation menu");
+      menuBtn.setAttribute("aria-expanded", "false");
+      menuBtn.innerHTML = `
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+      `;
+      navActions.appendChild(menuBtn);
+      topbar.appendChild(navActions);
+
+      const drawer = document.createElement("div");
+      drawer.className = "mobile-drawer-overlay";
+      drawer.id = "mobileDrawer";
+      drawer.setAttribute("aria-hidden", "true");
+      drawer.innerHTML = `
+        <div class="mobile-drawer-panel">
+          <div class="mobile-drawer-header">
+            <a class="wordmark" href="index.html">
+              <span class="wordmark-icon">KT</span>
+              <span class="wordmark-text">
+                Kissing Trees
+                <small>A PRIVATE COTTAGE HOMESTAY</small>
+              </span>
+            </a>
+            <button type="button" class="mobile-drawer-close" aria-label="Close menu">&times;</button>
+          </div>
+          <nav class="mobile-drawer-nav">
+            <a href="index.html">Home</a>
+            <a href="about.html">About the Cottage</a>
+            <a href="gallery.html">Photo Gallery</a>
+            <a href="amenities.html">Amenities</a>
+            <a href="pricing.html">Tariff</a>
+            <a href="contact.html">Contact Host</a>
+          </nav>
+          <div class="mobile-drawer-footer">
+            <a class="button mobile-drawer-cta" href="booking.html">Request to book <span>↗</span></a>
+            <p class="mobile-drawer-note">Owner-reviewed stays · Direct host confirmation</p>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(drawer);
+
+      const closeDrawer = () => {
+        drawer.classList.remove("open");
+        menuBtn.setAttribute("aria-expanded", "false");
+        drawer.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      };
+
+      const openDrawer = () => {
+        drawer.classList.add("open");
+        menuBtn.setAttribute("aria-expanded", "true");
+        drawer.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+      };
+
+      menuBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (drawer.classList.contains("open")) {
+          closeDrawer();
+        } else {
+          openDrawer();
+        }
+      });
+
+      drawer.querySelector(".mobile-drawer-close").addEventListener("click", closeDrawer);
+      drawer.addEventListener("click", (e) => {
+        if (e.target === drawer) closeDrawer();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && drawer.classList.contains("open")) closeDrawer();
+      });
+    }
+
     const footerBrand = document.querySelector(".footer-brand");
     if (footerBrand && !footerBrand.querySelector(".social-links")) {
       footerBrand.insertAdjacentHTML(

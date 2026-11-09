@@ -42,7 +42,7 @@ const seed = () => [
     name: "Sample Solo Guest",
     phone: "SAMPLE contact",
     guests: "Sample solo guest name and age",
-    idType: "Company ID / Corporate ID",
+    idType: "Company ID / Business Card",
     ownerStatus: "PENDING OWNER APPROVAL",
   },
 ];
