@@ -1074,29 +1074,7 @@ h3 {
   width: 600px;
   height: 600px;
 }
-.site-footer {
-  min-height: 86px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  padding: 18px clamp(20px, 5vw, 78px);
-  background: #f0ede2;
-  border-top: 1px solid var(--line);
-  color: var(--muted);
-  font-size: 9px;
-}
-.site-footer .wordmark {
-  font-size: 13px;
-}
-.site-footer .wordmark-icon {
-  width: 30px;
-  height: 30px;
-  font-size: 9px;
-}
-.site-footer .wordmark small {
-  font-size: 7px;
-}
+
 /* ============================================================
    KISSING TREES — LUXURY BOOKING FLOW
    Palette: Terracotta (#9B4433), Warm Creams (#FDFBF7, #FAF6EE),
@@ -3537,10 +3515,45 @@ td .small {
   border-bottom: 1px solid #ffffff26;
 }
 .site-footer .wordmark {
-  color: #fff;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+.site-footer .wordmark-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #a44a32;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-family: var(--serif);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+.site-footer .wordmark-text,
+.site-footer .wordmark > span,
+.site-footer .wordmark-name {
+  color: #ffffff !important;
+  font-family: var(--font-briem) !important;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
 }
 .site-footer .wordmark small {
+  display: block;
+  font-family: var(--sans) !important;
   color: #e59a68;
+  font-size: 8.5px;
+  letter-spacing: 0.18em;
+  font-weight: 700;
+  margin-top: 2px;
+  text-transform: uppercase;
 }
 .footer-tagline {
   max-width: 245px;
@@ -3624,8 +3637,8 @@ td .small {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  color: #a89387;
-  font-size: 10px;
+  color: #c4b5a8;
+  font-size: 11px;
 }
 .footer-bottom span:last-child {
   text-align: right;
