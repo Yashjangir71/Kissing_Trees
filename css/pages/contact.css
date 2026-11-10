@@ -69,21 +69,22 @@
 .contact-card .button {
   justify-self: start;
   margin-top: 10px;
-  padding: 12px 20px;
+  min-height: 44px;
+  padding: 11px 20px;
   background: var(--paper);
   color: var(--pine) !important;
-  border: 1.5px solid rgba(164, 74, 50, 0.42);
-  border-radius: 8px;
+  border: 1px solid rgba(164, 74, 50, 0.45);
+  border-radius: 6px;
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.03em;
-  box-shadow: 0 3px 10px rgba(32, 23, 19, 0.04);
+  letter-spacing: 0.04em;
+  box-shadow: 0 2px 8px rgba(32, 23, 19, 0.04);
   transition:
-    transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
-    background 0.24s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.24s cubic-bezier(0.22, 1, 0.36, 1),
-    color 0.22s ease,
-    box-shadow 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+    transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.2s ease,
+    box-shadow 0.24s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .contact-card .button:hover {
@@ -91,18 +92,18 @@
   border-color: var(--pine);
   color: var(--paper) !important;
   transform: translateY(-2px);
-  box-shadow: 0 10px 22px rgba(164, 74, 50, 0.24);
+  box-shadow: 0 8px 18px rgba(32, 23, 19, 0.14);
 }
 
 .contact-card .button:focus-visible {
   outline: none;
   box-shadow:
-    0 0 0 3px rgba(164, 74, 50, 0.2),
-    0 8px 18px rgba(164, 74, 50, 0.16);
+    0 0 0 2px var(--paper),
+    0 0 0 4px var(--pine);
 }
 
 .contact-card .button:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.985);
 }
 
 /* Right Column: Boutique Form Panel */
@@ -217,41 +218,47 @@
 .contact-form .button {
   justify-self: start;
   margin-top: 4px;
-  padding: 15px 26px;
-  min-height: 48px;
+  padding: 13px 26px;
+  min-height: 46px;
   background: var(--pine);
   border: 1px solid var(--pine);
-  border-radius: 10px;
+  border-radius: 6px;
   color: var(--paper) !important;
   font-size: 12.5px;
   font-weight: 700;
   letter-spacing: 0.04em;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(164, 74, 50, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 248, 0.22),
+    0 6px 16px rgba(32, 23, 19, 0.16);
   transition:
-    transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
-    background 0.24s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.24s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+    transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.24s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .contact-form .button:hover:not(:disabled) {
   background: var(--jade);
   border-color: var(--jade);
   transform: translateY(-2px);
-  box-shadow: 0 12px 26px rgba(164, 74, 50, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 248, 0.28),
+    0 10px 24px rgba(32, 23, 19, 0.22);
 }
 
 .contact-form .button:focus-visible {
   outline: none;
   box-shadow:
-    0 0 0 3px rgba(164, 74, 50, 0.24),
-    0 10px 22px rgba(164, 74, 50, 0.22);
+    0 0 0 2px #fffdf8,
+    0 0 0 4px var(--pine);
 }
 
 .contact-form .button:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(164, 74, 50, 0.2);
+  transform: translateY(0) scale(0.985);
+  box-shadow:
+    inset 0 2px 4px rgba(32, 23, 19, 0.18),
+    0 2px 6px rgba(32, 23, 19, 0.14);
 }
 
 .contact-form .button:disabled {
@@ -261,12 +268,16 @@
 }
 
 .contact-card .button span,
-.contact-form .button span {
-  transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+.contact-card .button .btn-arrow,
+.contact-form .button span,
+.contact-form .button .btn-arrow {
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .contact-card .button:hover span,
-.contact-form .button:hover:not(:disabled) span {
+.contact-card .button:hover .btn-arrow,
+.contact-form .button:hover:not(:disabled) span,
+.contact-form .button:hover:not(:disabled) .btn-arrow {
   transform: translate(2px, -2px);
 }
 
