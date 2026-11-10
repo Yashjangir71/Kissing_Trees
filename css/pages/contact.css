@@ -1,0 +1,160 @@
+/* ============================================================
+   KISSING TREES — CONTACT PAGE
+   ============================================================ */
+.contact-layout {
+  grid-template-columns: 1fr 1fr;
+}
+
+.contact-layout h2 {
+  font-size: clamp(34px, 4vw, 50px);
+  margin: 16px 0;
+}
+
+.contact-card {
+  display: grid;
+  gap: 5px;
+  padding: 17px 0;
+  border-top: 1px solid var(--line);
+}
+
+.contact-card small {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  margin-bottom: 7px;
+}
+
+.contact-card strong {
+  color: var(--pine);
+  font: 500 20px var(--serif);
+}
+
+.contact-card .button {
+  justify-self: start;
+  margin-top: 9px;
+}
+
+.contact-side {
+  padding: 25px;
+  background: #f7ede3;
+}
+
+.contact-side h3 {
+  font: 500 23px var(--serif);
+  color: var(--pine);
+}
+
+.contact-side > p:not(.eyebrow) {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.contact-form {
+  display: grid;
+  gap: 13px;
+  margin: 22px 0 25px;
+}
+
+.contact-form label {
+  display: grid;
+  gap: 5px;
+  color: var(--pine);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.contact-form input:not([type="checkbox"]),
+.contact-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #e5d5c6;
+  border-radius: 2px;
+  padding: 11px 12px;
+  background: #f8faf5;
+  color: var(--ink);
+  font-size: 13px;
+  letter-spacing: 0;
+  outline: 0;
+  resize: vertical;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.contact-form input:not([type="checkbox"]):focus,
+.contact-form textarea:focus {
+  border-color: var(--pine);
+  background: #fff;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: #917f75;
+}
+
+.contact-form .button {
+  border: 0;
+  cursor: pointer;
+  justify-self: start;
+}
+
+.contact-form-status {
+  margin-top: 14px;
+  padding: 13px 15px;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.55;
+  border: 1px solid #dccab2;
+  background: #fffdf8;
+  color: #4a3e35;
+}
+
+.contact-form-status.is-success {
+  background: #f4faf5;
+  border-color: #b8dcc0;
+  color: #1e4f28;
+}
+
+.contact-form-status.is-error {
+  background: #faf0ee;
+  border-color: #e6b6af;
+  color: #7a2c20;
+}
+
+.contact-status-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-weight: 700;
+  color: var(--pine);
+  text-decoration: underline;
+}
+
+.contact-honeypot {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.detail-location {
+  display: grid;
+}
+
+.detail-location .location-copy {
+  padding: 10px 0;
+}
+
+@media (max-width: 760px) {
+  .contact-layout {
+    grid-template-columns: 1fr;
+  }
+  .contact-side {
+    padding: 20px;
+  }
+}
+

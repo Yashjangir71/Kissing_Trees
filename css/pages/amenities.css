@@ -1,0 +1,35 @@
+/* ============================================================
+   KISSING TREES — AMENITIES PAGE
+   ============================================================ */
+.amenity-page-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.amenity-page-grid .card {
+  min-height: 135px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 16px;
+  box-shadow: none;
+}
+
+.amenity-page-grid .ic {
+  font-size: 21px;
+}
+
+.amenity-page-grid b {
+  font-size: 11px;
+}
+
+@media (max-width: 760px) {
+  .amenity-page-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+

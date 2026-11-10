@@ -37,6 +37,18 @@ const SITE = {
     ["🌴", "Private Garden"],
     ["🔥", "BBQ Corner (SAMPLE)"],
   ],
+  formatWhatsApp() {
+    const digits = String(this.whatsapp || "").replace(/\D/g, "");
+    if (digits.length === 12 && digits.startsWith("91")) {
+      return `+91 ${digits.slice(2, 7)} ${digits.slice(7)}`;
+    }
+    return this.whatsapp;
+  },
+  whatsappUrl(message) {
+    const digits = String(this.whatsapp || "").replace(/\D/g, "");
+    if (digits.length < 10) return "contact.html";
+    return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
+  },
 };
 
 // Keep shared property identity consistent on every static page.
@@ -47,7 +59,16 @@ const SITE = {
     [/\bKissing Tree\b/g, SITE.name],
     [/\bA Private Cottage Homestay for Families, Artists & Travelers\b/g, SITE.tagline],
   ];
-  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const ignoredTags = new Set(["SCRIPT", "STYLE", "TEXTAREA", "NOSCRIPT"]);
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      const parent = node.parentElement;
+      if (parent && ignoredTags.has(parent.tagName)) {
+        return NodeFilter.FILTER_REJECT;
+      }
+      return NodeFilter.FILTER_ACCEPT;
+    },
+  });
   let node;
   while ((node = walker.nextNode())) {
     let text = node.nodeValue;
@@ -62,7 +83,9 @@ const SITE = {
   if (!document.body.classList.contains("admin-page")) {
     const topbar = document.querySelector(".topbar");
     if (topbar && !topbar.querySelector(".mobile-nav-actions")) {
-      const isBookingPage = window.location.pathname.endsWith("booking.html") || window.location.href.includes("booking.html");
+      const isBookingPage =
+        /(?:^|\/)booking(?:\.html)?\/?$/i.test(window.location.pathname) ||
+        window.location.href.includes("booking.html");
       const navActions = document.createElement("div");
       navActions.className = "mobile-nav-actions";
 
@@ -109,6 +132,7 @@ const SITE = {
             <a href="gallery.html">Photo Gallery</a>
             <a href="amenities.html">Amenities</a>
             <a href="pricing.html">Tariff</a>
+            <a href="blog.html">Blog &amp; Guides</a>
             <a href="contact.html">Contact Host</a>
           </nav>
           <div class="mobile-drawer-footer">
@@ -173,10 +197,7 @@ const SITE = {
     const whatsappMessage =
       "Hello, I am interested in staying at Kissing Trees. Please share availability and booking details.";
     whatsapp.className = "whatsapp-float";
-    whatsapp.href =
-      whatsappNumber.length >= 10
-        ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`
-        : "contact.html";
+    whatsapp.href = SITE.whatsappUrl(whatsappMessage);
     whatsapp.target = whatsappNumber.length >= 10 ? "_blank" : "_self";
     whatsapp.rel = "noopener";
     whatsapp.setAttribute("aria-label", "Chat with Kissing Trees on WhatsApp");

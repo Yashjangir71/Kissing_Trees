@@ -1,0 +1,110 @@
+/* ============================================================
+   KISSING TREES — GALLERY PAGE & LIGHTBOX
+   ============================================================ */
+.gallery-page-content {
+  display: block;
+}
+
+.gallery-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.gallery-heading h2 {
+  margin: 16px 0 0;
+  font-size: clamp(38px, 5vw, 58px);
+}
+
+.gallery-heading > p {
+  max-width: 190px;
+  margin: 0 0 5px;
+  color: var(--muted);
+  font-size: 11px;
+  text-align: right;
+}
+
+.gallery-page-content .editorial-gallery {
+  grid-template-rows: 260px 260px;
+}
+
+.gallery-page-content > .sample-stamp {
+  display: block;
+  margin-top: 15px;
+}
+
+.gallery-lightbox {
+  position: fixed;
+  z-index: 1200;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 30px;
+  background: rgba(14, 45, 37, 0.88);
+}
+
+.gallery-lightbox[hidden] {
+  display: none;
+}
+
+.gallery-lightbox figure {
+  max-width: min(940px, 92vw);
+  max-height: 88vh;
+  margin: 0;
+}
+
+.gallery-lightbox img {
+  display: block;
+  max-width: 100%;
+  max-height: 78vh;
+  object-fit: contain;
+  border: 8px solid var(--paper);
+}
+
+.gallery-lightbox figcaption {
+  margin-top: 12px;
+  color: #f7f3e9;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 22px;
+  right: 28px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 253, 248, 0.5);
+  border-radius: 50%;
+  background: transparent;
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+@media (max-width: 760px) {
+  .gallery-page-content .editorial-gallery {
+    grid-template-rows: 170px 170px 170px;
+    grid-auto-rows: 170px;
+  }
+  .gallery-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .gallery-heading > p {
+    max-width: none;
+    margin: 0;
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-page-content .editorial-gallery {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+

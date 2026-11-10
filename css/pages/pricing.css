@@ -1,0 +1,17 @@
+/* ============================================================
+   KISSING TREES — TARIFF / PRICING PAGE
+   ============================================================ */
+.pricing-content {
+  display: block;
+}
+
+.pricing-content .detail-callout {
+  max-width: 680px;
+}
+
+@media (max-width: 480px) {
+  .pricing-content .rate-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

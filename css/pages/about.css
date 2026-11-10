@@ -1,0 +1,110 @@
+/* ============================================================
+   KISSING TREES — ABOUT PAGE
+   ============================================================ */
+.founder-section {
+  max-width: 1160px;
+  margin: auto;
+  padding: 0 clamp(22px, 8vw, 100px) 90px;
+  display: grid;
+  grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr);
+  gap: 8vw;
+  align-items: center;
+}
+
+.founder-photo {
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 24px;
+  text-align: center;
+  color: #fff;
+  background:
+    radial-gradient(circle at 50% 30%, #e8c6a0 0 15%, transparent 15.5%),
+    radial-gradient(ellipse at 50% 68%, #6e4f3f 0 28%, transparent 28.5%),
+    linear-gradient(145deg, #c9a981, #6a9c91 55%, #2e6e65);
+  border-radius: 48% 48% 3px 3px;
+  box-shadow: var(--shadow);
+}
+
+.founder-photo span {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.founder-photo small {
+  margin-top: 5px;
+  color: #f8eee5;
+  font-size: 10px;
+}
+
+.founder-copy {
+  max-width: 500px;
+  color: #6c594f;
+  font-size: 13px;
+}
+
+.founder-copy h2 {
+  margin: 0 0 20px;
+  font-size: clamp(38px, 5vw, 58px);
+}
+
+.founder-copy p {
+  margin-bottom: 17px;
+}
+
+.subpage-band {
+  padding: 48px clamp(24px, 13vw, 180px);
+  background: #f5ece2;
+}
+
+.subpage-band h2 {
+  font-size: clamp(34px, 5vw, 52px);
+}
+
+.fact-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.fact-row div {
+  padding: 15px 0;
+  border-top: 1px solid #e5d4c3;
+}
+
+.fact-row small {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  margin-bottom: 7px;
+}
+
+.fact-row strong {
+  font: 500 16px var(--serif);
+  color: var(--pine);
+}
+
+@media (max-width: 760px) {
+  .founder-section {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-bottom: 58px;
+  }
+  .founder-photo {
+    min-height: 280px;
+  }
+  .fact-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .fact-row {
+    gap: 2px;
+  }
+}
+

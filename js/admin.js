@@ -81,7 +81,7 @@ function render() {
   document.getElementById("rows").innerHTML =
     all
       .map(
-        (r, i) => `<tr>
+        (r) => `<tr>
     <td><b>${escapeHTML(r.id)}</b><br><span class="small">${escapeHTML(r.time)}</span></td>
     <td>
       <b>${escapeHTML(r.name)}</b><br>
@@ -92,8 +92,8 @@ function render() {
       ${
         r.idFront || r.idBack
           ? `<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-            ${r.idFront ? `<button type="button" class="id-thumb-btn" onclick="viewIdModal('${escapeHTML(r.id)}','front')">📷 Front ID</button>` : ""}
-            ${r.idBack ? `<button type="button" class="id-thumb-btn" onclick="viewIdModal('${escapeHTML(r.id)}','back')">📷 Back ID</button>` : ""}
+            ${r.idFront ? `<button type="button" class="id-thumb-btn" data-view-id="${escapeHTML(r.id)}" data-side="front">📷 Front ID</button>` : ""}
+            ${r.idBack ? `<button type="button" class="id-thumb-btn" data-view-id="${escapeHTML(r.id)}" data-side="back">📷 Back ID</button>` : ""}
           </div>`
           : ""
       }
@@ -102,22 +102,38 @@ function render() {
     <td>${escapeHTML(r.checkin)} → ${escapeHTML(r.checkout)}</td>
     <td><span class="chip ${r.gateStatus === "ALLOWED" ? "a" : "r"}">${escapeHTML(r.gateStatus)}</span></td>
     <td><span class="chip ${String(r.ownerStatus || "").startsWith("APPROVED") ? "a" : String(r.ownerStatus || "").startsWith("DECLINED") ? "d" : "p"}">${escapeHTML(r.ownerStatus)}</span>${r.payLink ? `<br><span class="small">DEMO link: ${escapeHTML(r.payLink)}</span>` : ""}</td>
-    <td>${r.ownerStatus === "PENDING OWNER APPROVAL" ? `<button class="btn" style="padding:7px 10px;font-size:12px" onclick="act(${i},true)">Approve</button> <button class="btn alt" style="padding:7px 10px;font-size:12px" onclick="act(${i},false)">Decline</button>` : ""}</td>
+    <td>${r.ownerStatus === "PENDING OWNER APPROVAL" ? `<button type="button" class="btn" style="padding:7px 10px;font-size:12px" data-act="approve" data-req-id="${escapeHTML(r.id)}">Approve</button> <button type="button" class="btn alt" style="padding:7px 10px;font-size:12px" data-act="decline" data-req-id="${escapeHTML(r.id)}">Decline</button>` : ""}</td>
   </tr>`,
       )
       .join("") || `<tr><td colspan="7">No requests yet.</td></tr>`;
 }
-function act(index, approved) {
+function act(reqId, approved) {
   const all = load();
-  if (!all[index]) return;
-  all[index].ownerStatus = approved ? "APPROVED" : "DECLINED";
+  const item = all.find((r) => String(r.id) === String(reqId));
+  if (!item) return;
+  item.ownerStatus = approved ? "APPROVED" : "DECLINED";
   if (approved)
-    all[index].payLink =
+    item.payLink =
       "https://pay.kissingtree.example/" +
-      encodeURIComponent(all[index].id) +
+      encodeURIComponent(item.id) +
       " (DEMO link)";
   localStorage.setItem(KEY, JSON.stringify(all));
   render();
+}
+
+const rowsEl = document.getElementById("rows");
+if (rowsEl) {
+  rowsEl.addEventListener("click", (event) => {
+    const viewBtn = event.target.closest("[data-view-id]");
+    if (viewBtn) {
+      window.viewIdModal(viewBtn.dataset.viewId, viewBtn.dataset.side);
+      return;
+    }
+    const actBtn = event.target.closest("[data-act]");
+    if (actBtn) {
+      act(actBtn.dataset.reqId, actBtn.dataset.act === "approve");
+    }
+  });
 }
 function showPanel() {
   loginScreen.hidden = true;
@@ -161,8 +177,8 @@ window.viewIdModal = function (id, side) {
   const req = all.find((item) => item.id === id);
   if (!req) return;
   const dataUrl = side === "front" ? req.idFront : req.idBack;
-  if (!dataUrl) {
-    alert("No photo available for this side.");
+  if (typeof dataUrl !== "string" || !dataUrl.startsWith("data:image/")) {
+    alert("No valid photo available for this side.");
     return;
   }
 

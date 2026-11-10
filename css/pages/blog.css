@@ -1,0 +1,318 @@
+/* ============================================================
+   KISSING TREES — BLOG & FIELD NOTES PAGE
+   ============================================================ */
+.blog-shell {
+  max-width: 1160px;
+  margin: auto;
+  padding: 64px clamp(20px, 7vw, 90px) 88px;
+}
+
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 26px;
+}
+
+.blog-card {
+  display: flex;
+  flex-direction: column;
+  background: #fffdf8;
+  border: 1px solid #e4d8c5;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(32, 23, 19, 0.04);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.blog-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(164, 74, 50, 0.35);
+  box-shadow: 0 18px 40px rgba(32, 23, 19, 0.1);
+}
+
+.blog-card--featured {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1.18fr 1fr;
+}
+
+.blog-card-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--sand);
+  display: block;
+}
+
+.blog-card--featured .blog-card-media {
+  aspect-ratio: auto;
+  min-height: 330px;
+  height: 100%;
+}
+
+.blog-card-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(20, 14, 10, 0.16) 0%, transparent 45%, rgba(20, 14, 10, 0.12) 100%);
+  pointer-events: none;
+}
+
+.blog-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.blog-card:hover .blog-card-media img {
+  transform: scale(1.04);
+}
+
+.blog-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(28, 22, 19, 0.78);
+  backdrop-filter: blur(6px);
+  color: #f7eee6;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.blog-card-body {
+  padding: 24px 26px 22px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 11px;
+}
+
+.blog-card--featured .blog-card-body {
+  padding: 32px 34px 28px;
+  justify-content: center;
+}
+
+.blog-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--clay);
+}
+
+.blog-card h2 {
+  font-family: var(--serif);
+  font-size: 22px;
+  line-height: 1.24;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.blog-card--featured h2 {
+  font-size: clamp(24px, 2.5vw, 31px);
+  line-height: 1.18;
+}
+
+.blog-card p {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--muted);
+  margin: 0;
+  flex: 1;
+}
+
+.blog-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.blog-tags span {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #f5ede0;
+  border: 1px solid #e6d9c5;
+  color: #5e4e44;
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+.blog-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 14px;
+  border-top: 1px solid #ede3d4;
+}
+
+.blog-place {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* Social Follow Banner */
+.blog-follow-banner {
+  margin-top: 44px;
+  padding: 34px clamp(22px, 4vw, 44px);
+  background:
+    radial-gradient(circle at 92% 18%, rgba(164, 74, 50, 0.1) 0, transparent 42%),
+    linear-gradient(135deg, #fbf5ea 0%, #f1e3cf 100%);
+  border: 1px solid #dfd0ba;
+  border-radius: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px 32px;
+  box-shadow: 0 12px 32px rgba(32, 23, 19, 0.05);
+}
+
+.blog-follow-copy {
+  max-width: 500px;
+}
+
+.blog-follow-copy .eyebrow {
+  margin-bottom: 10px;
+}
+
+.blog-follow-copy h2 {
+  font-size: clamp(26px, 3vw, 36px);
+  line-height: 1.12;
+  margin: 0 0 10px;
+  color: var(--ink);
+}
+
+.blog-follow-copy p:last-child {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #5e4e44;
+}
+
+.blog-social-pills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.social-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border-radius: 999px;
+  background: #fffdf8;
+  border: 1px solid #dccab2;
+  color: #201713;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.social-pill svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+.social-pill small {
+  font-size: 13px;
+  line-height: 1;
+  opacity: 0.75;
+}
+
+.social-pill:hover {
+  transform: translateY(-2px);
+  background: #201713;
+  border-color: #201713;
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(32, 23, 19, 0.16);
+}
+
+.social-pill:focus-visible {
+  outline: 2px solid var(--pine);
+  outline-offset: 2px;
+}
+
+.social-pill--primary {
+  background: var(--pine);
+  border-color: var(--pine);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(164, 74, 50, 0.24);
+}
+
+.social-pill--primary:hover {
+  background: var(--jade);
+  border-color: var(--jade);
+  color: #ffffff;
+  box-shadow: 0 12px 24px rgba(164, 74, 50, 0.3);
+}
+
+/* Blog Responsive Rules */
+@media (max-width: 900px) {
+  .blog-card--featured {
+    grid-template-columns: 1fr;
+  }
+  .blog-card--featured .blog-card-media {
+    aspect-ratio: 16 / 10;
+    min-height: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .blog-shell {
+    padding: 40px 18px 56px;
+  }
+  .blog-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .blog-card--featured .blog-card-body,
+  .blog-card-body {
+    padding: 20px 18px 18px;
+  }
+  .blog-card h2,
+  .blog-card--featured h2 {
+    font-size: 20px;
+    line-height: 1.25;
+  }
+  .blog-card-footer {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .blog-follow-banner {
+    padding: 24px 18px;
+    gap: 18px;
+  }
+  .blog-social-pills {
+    width: 100%;
+  }
+  .social-pill {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
+

@@ -2,6 +2,37 @@
 let gate = null,
   step1Data = null;
 const $ = (id) => document.getElementById(id);
+const MAX_GUESTS = Number(SITE.maxGuests) || 10;
+
+function getLocalTodayIso() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, "0");
+  const d = String(now.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+function parseIsoUtc(iso) {
+  const parts = String(iso || "").split("-").map(Number);
+  if (parts.length !== 3 || parts.some((n) => !Number.isInteger(n))) return null;
+  const [y, m, d] = parts;
+  return Date.UTC(y, m - 1, d);
+}
+
+function addDaysToIso(iso, days) {
+  const utcMs = parseIsoUtc(iso);
+  if (utcMs === null) return "";
+  const dt = new Date(utcMs);
+  dt.setUTCDate(dt.getUTCDate() + days);
+  return dt.toISOString().slice(0, 10);
+}
+
+function diffIsoDays(startIso, endIso) {
+  const startMs = parseIsoUtc(startIso);
+  const endMs = parseIsoUtc(endIso);
+  if (startMs === null || endMs === null) return 0;
+  return Math.round((endMs - startMs) / (1000 * 60 * 60 * 24));
+}
 
 // Progress and Step Management
 const progBar1 = $("progBar1");
@@ -17,7 +48,7 @@ $("step1").addEventListener("submit", (event) => {
     children: $("children").value,
     purpose: $("purpose").value,
   };
-  gate = classifyBooking({ ...step1Data, maxGuests: SITE.maxGuests });
+  gate = classifyBooking({ ...step1Data, maxGuests: MAX_GUESTS });
   const box = $("gateResult");
   box.style.display = "block";
   if (gate.status === "BLOCKED") {
@@ -34,6 +65,9 @@ $("step1").addEventListener("submit", (event) => {
   if (gate.status === "INVALID") {
     box.className = "result review";
     box.textContent = gate.message;
+    $("step2").style.display = "none";
+    if (progressLabel) progressLabel.textContent = "STEP 01 OF 02 — GUEST PROFILE";
+    if (progBar2) progBar2.classList.remove("active");
     return;
   }
   box.className = "result " + (gate.status === "REVIEW" ? "review" : "ok");
@@ -49,15 +83,16 @@ $("step1").addEventListener("submit", (event) => {
 
 $("step2").addEventListener("submit", (event) => {
   event.preventDefault();
+  const sentBox = $("sentResult");
   if (
     !step1Data ||
     !gate ||
     gate.status === "INVALID" ||
     gate.status === "BLOCKED"
   ) {
-    const box = $("sentResult");
-    box.style.display = "block";
-    box.textContent =
+    sentBox.className = "result review";
+    sentBox.style.display = "block";
+    sentBox.textContent =
       "Please complete the guest profile before sending a request.";
     return;
   }
@@ -95,18 +130,35 @@ $("step2").addEventListener("submit", (event) => {
     requests = [];
   }
   requests.unshift(request);
-  localStorage.setItem("kt_requests", JSON.stringify(requests));
-  const box = $("sentResult");
-  box.style.display = "block";
-  box.textContent = `Request sent! (Ref: ${request.id}) The owner will reply on WhatsApp within ${SITE.approvalHours} hours. Your payment link will be shared only after approval. No payment has been taken.`;
+  try {
+    localStorage.setItem("kt_requests", JSON.stringify(requests));
+  } catch {
+    sentBox.className = "result block";
+    sentBox.style.display = "block";
+    sentBox.textContent =
+      "Browser storage is full (often from large ID photos in earlier demo tests). Please remove an ID photo or clear older demo requests in the Owner Desk, then try again.";
+    sentBox.scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+  sentBox.className = "result success-result";
+  sentBox.style.display = "block";
+  sentBox.textContent = `Request sent! (Ref: ${request.id}) The owner will reply on WhatsApp within ${SITE.approvalHours} hours. Your payment link will be shared only after approval. No payment has been taken.`;
+  const gateBox = $("gateResult");
+  if (gateBox) gateBox.style.display = "none";
+  const progressWrap = document.querySelector(".step-progress-wrapper");
+  if (progressWrap) progressWrap.style.display = "none";
   $("step1").style.display = "none";
   $("step2").style.display = "none";
-  box.scrollIntoView({ behavior: "smooth", block: "center" });
+  sentBox.scrollIntoView({ behavior: "smooth", block: "center" });
 });
 
 const bookingContact = document.getElementById("bookingContact");
-if (bookingContact)
-  bookingContact.textContent = "Owner WhatsApp: " + SITE.whatsapp;
+if (bookingContact) {
+  const formattedWa = SITE.formatWhatsApp
+    ? SITE.formatWhatsApp()
+    : SITE.whatsapp;
+  bookingContact.textContent = "Owner WhatsApp: " + formattedWa;
+}
 
 // ============================================================
 // GUEST COUNTER STEPPERS & REAL-TIME SUMMARY
@@ -152,7 +204,7 @@ document.querySelectorAll(".stepper-btn").forEach((btn) => {
     if (isNaN(val)) val = 0;
 
     if (btn.classList.contains("stepper-btn-inc")) {
-      if (val < 10) val += 1;
+      if (val < MAX_GUESTS) val += 1;
     } else if (btn.classList.contains("stepper-btn-dec")) {
       if (val > 0) val -= 1;
     }
@@ -194,29 +246,24 @@ const nightsCountText = $("nightsCountText");
 const dateDurationDetail = $("dateDurationDetail");
 
 if (checkinInput && checkoutInput) {
-  // Set minimum check-in to today
-  const todayStr = new Date().toISOString().split("T")[0];
+  // Set minimum check-in to local today, checkout at least next calendar day
+  const todayStr = getLocalTodayIso();
   checkinInput.min = todayStr;
+  checkoutInput.min = addDaysToIso(todayStr, 1);
 
   function updateDateDuration() {
     const ci = checkinInput.value;
     const co = checkoutInput.value;
 
-    if (ci) {
-      // Check-out must be at least the same day or day after
-      checkoutInput.min = ci;
-    }
+    checkoutInput.min = ci ? addDaysToIso(ci, 1) : addDaysToIso(todayStr, 1);
 
     if (ci && co) {
-      const d1 = new Date(ci);
-      const d2 = new Date(co);
-      const diffMs = d2 - d1;
-      const nights = Math.round(diffMs / (1000 * 60 * 60 * 24));
+      const nights = diffIsoDays(ci, co);
 
       if (nights > 0) {
         if (nightsCountText) nightsCountText.textContent = `${nights} night${nights === 1 ? "" : "s"}`;
         if (dateDurationDetail) {
-          dateDurationDetail.textContent = `Trip Duration: ${nights} night${nights === 1 ? "" : "s"} · Check-in 11:00 AM · Check-out 10:00 AM`;
+          dateDurationDetail.textContent = `Trip Duration: ${nights} night${nights === 1 ? "" : "s"} · Check-in ${SITE.checkIn} · Check-out ${SITE.checkOut}`;
           dateDurationDetail.style.color = "#9B4433";
           dateDurationDetail.style.fontWeight = "600";
         }
@@ -225,6 +272,7 @@ if (checkinInput && checkoutInput) {
         if (dateDurationDetail) {
           dateDurationDetail.textContent = "Check-out must be after check-in.";
           dateDurationDetail.style.color = "#C84B31";
+          dateDurationDetail.style.fontWeight = "";
         }
       }
     } else {
@@ -238,11 +286,12 @@ if (checkinInput && checkoutInput) {
   }
 
   checkinInput.addEventListener("change", () => {
-    if (checkoutInput.value && checkoutInput.value <= checkinInput.value) {
-      // Auto-adjust checkout to next day
-      const nextDay = new Date(checkinInput.value);
-      nextDay.setDate(nextDay.getDate() + 1);
-      checkoutInput.value = nextDay.toISOString().split("T")[0];
+    if (
+      checkinInput.value &&
+      checkoutInput.value &&
+      checkoutInput.value <= checkinInput.value
+    ) {
+      checkoutInput.value = addDaysToIso(checkinInput.value, 1);
     }
     updateDateDuration();
   });
@@ -465,7 +514,7 @@ setupIdUploader(
   "idFrontDropzone"
 );
 
-// Setup Back Uploader
+// Setup Back Uploader (keepCancelVisible: Cancel/Remove button stays managed by idBackCancelBtn)
 setupIdUploader(
   "back",
   "idBackFileInput",
@@ -474,7 +523,7 @@ setupIdUploader(
   "idBackPlaceholder",
   "idBackStatus",
   "idBackCard",
-  "idBackCancelBtn",
+  null,
   "idBackDropzone"
 );
 
@@ -483,13 +532,15 @@ if (idAddBackBtn) {
   idAddBackBtn.addEventListener("click", () => {
     if (idAddBackWrapper) idAddBackWrapper.hidden = true;
     if (idBackCard) idBackCard.hidden = false;
+    if (idBackCancelBtn) idBackCancelBtn.hidden = false;
     if (idUploadFlow) idUploadFlow.classList.add("both-active");
   });
 }
 
 // Cancel / Remove back card handler
 if (idBackCancelBtn) {
-  idBackCancelBtn.addEventListener("click", () => {
+  idBackCancelBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
     resetBackUploader();
     if (idBackCard) idBackCard.hidden = true;
     if (idUploadFlow) idUploadFlow.classList.remove("both-active");

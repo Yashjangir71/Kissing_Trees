@@ -1,0 +1,129 @@
+/* ============================================================
+   KISSING TREES — FAQ & HOUSE RULES PAGE
+   ============================================================ */
+.rules-list article {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.rules-list article:first-child {
+  padding-top: 0;
+}
+
+.rules-list article > span {
+  font: italic 13px var(--serif);
+  color: var(--clay);
+}
+
+.rules-list p {
+  font-size: 12px;
+  margin: 0;
+  color: #5e4e44;
+}
+
+.faq-list details {
+  border: 1px solid transparent;
+  border-bottom-color: var(--line);
+  border-radius: 4px;
+  padding: 0 18px;
+  margin: 0;
+  background: rgba(255, 253, 248, 0.42);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.faq-list summary {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  list-style: none;
+  cursor: pointer;
+  min-height: 68px;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--pine);
+}
+
+.faq-list summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-list .faq-number {
+  flex: 0 0 28px;
+  color: var(--clay);
+  font: italic 15px var(--serif);
+}
+
+.faq-list .faq-question {
+  flex: 1;
+}
+
+.faq-list .faq-toggle {
+  color: var(--clay);
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.faq-list details[open] {
+  border-color: #d7d2c4;
+  background: var(--paper);
+  transform: translateX(4px);
+}
+
+.faq-list details[open] .faq-toggle {
+  transform: rotate(45deg);
+}
+
+.faq-list details:not([open]):hover {
+  border-color: #d7d2c4;
+  background: rgba(255, 253, 248, 0.8);
+}
+
+.faq-list details p {
+  max-width: 520px;
+  margin: -2px 48px 20px;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+@media (max-width: 680px) {
+  .faq-list details {
+    padding: 0 14px;
+  }
+  .faq-list details[open] {
+    transform: none !important;
+  }
+  .faq-list details p {
+    margin: 0 0 16px 0 !important;
+    font-size: 13px !important;
+    line-height: 1.65 !important;
+    max-width: none !important;
+  }
+  .faq-list summary {
+    font-size: 16px;
+    padding: 16px 0;
+    gap: 12px;
+  }
+  .faq-list .faq-number {
+    flex: 0 0 22px;
+    font-size: 13px;
+  }
+  .rules-list article {
+    grid-template-columns: 24px 1fr;
+    gap: 10px;
+    padding: 12px 0;
+  }
+  .rules-list p {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+}
+
