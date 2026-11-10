@@ -14,20 +14,19 @@
      - css/pages/booking.css   : booking.html (multi-step form, steppers, ID upload, aside)
      - css/pages/admin.css     : admin.html (owner login, dashboard table, ID modal)
    ============================================================ */
-@import url('https://fonts.googleapis.com/css2?family=Briem+Hand:wght@300;400;500;600;700;800;900&family=Delius+Swash+Caps&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 /* Core & Shared Layout */
-@import url('./base.css');
-@import url('./layout.css');
+@import url('./base.css?v=20261110');
+@import url('./layout.css?v=20261110');
 
 /* Page Stylesheets */
-@import url('./pages/home.css');
-@import url('./pages/about.css');
-@import url('./pages/gallery.css');
-@import url('./pages/amenities.css');
-@import url('./pages/pricing.css');
-@import url('./pages/faq.css');
-@import url('./pages/contact.css');
-@import url('./pages/blog.css');
-@import url('./pages/booking.css');
-@import url('./pages/admin.css');
+@import url('./pages/home.css?v=20261110');
+@import url('./pages/about.css?v=20261110');
+@import url('./pages/gallery.css?v=20261110');
+@import url('./pages/amenities.css?v=20261110');
+@import url('./pages/pricing.css?v=20261110');
+@import url('./pages/faq.css?v=20261110');
+@import url('./pages/contact.css?v=20261110');
+@import url('./pages/blog.css?v=20261110');
+@import url('./pages/booking.css?v=20261110');
+@import url('./pages/admin.css?v=20261110');

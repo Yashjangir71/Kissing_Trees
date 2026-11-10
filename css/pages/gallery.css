@@ -417,20 +417,29 @@ body.gallery-page {
 }
 
 @media (max-width: 600px) {
+  .gallery-filters {
+    gap: 7px;
+  }
+  .filter-pill {
+    padding: 7px 13px;
+    font-size: 11px;
+  }
   .editorial-gallery {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 18px;
   }
   .gallery-card--wide {
     grid-column: span 1;
   }
-  .gallery-card--tall .gallery-media,
+  .gallery-card--tall .gallery-media {
+    aspect-ratio: 4 / 5;
+  }
   .gallery-card--wide .gallery-media {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 10;
   }
   .gallery-page .whatsapp-float {
-    right: 16px;
-    bottom: 16px;
+    right: 14px;
+    bottom: 14px;
   }
 }
 

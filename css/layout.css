@@ -543,10 +543,6 @@
   text-align: right;
 }
 
-.site-footer .page-links {
-  display: none;
-}
-
 @media (max-width: 700px) {
   .footer-main {
     grid-template-columns: 1fr 1fr;
@@ -739,23 +735,6 @@
   font: 500 17px/1.45 var(--serif);
 }
 
-.page-links {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 7px 15px;
-  max-width: 700px;
-}
-
-.page-links a {
-  font-size: 8px;
-  color: #6c594f;
-}
-
-.page-links a:hover {
-  color: var(--jade);
-}
-
 @media (max-width: 760px) {
   .subpage-hero {
     padding: 65px 24px 52px;
@@ -769,9 +748,6 @@
     gap: 25px;
     padding-top: 48px;
     padding-bottom: 58px;
-  }
-  .page-links {
-    gap: 8px 12px;
   }
 }
 

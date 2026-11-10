@@ -8,7 +8,6 @@ const whatsappDisplay = SITE.formatWhatsApp
   ? SITE.formatWhatsApp()
   : SITE.whatsapp;
 
-setText("nearbyLandscape", SITE.nearbyLandscape);
 setText("aboutCapacity", "Up to " + SITE.maxGuests + " guests");
 setText("aboutLandscape", SITE.nearbyLandscape);
 const amenities = document.getElementById("amenities");
@@ -26,16 +25,8 @@ setText(
   "priceNotes",
   `Price includes ${SITE.includedGuests} guests. Extra guest ${money(SITE.extraGuestCharge)}/night. Refundable security deposit ${money(SITE.securityDeposit)}.`,
 );
-setText("apprHrs", SITE.approvalHours);
-setText("footContact", SITE.location + " · " + SITE.email);
-setText("locationLine", SITE.location);
-setText(
-  "locationMore",
-  SITE.location + ". Exact arrival directions are shared after owner approval.",
-);
 setText("contactWhatsApp", whatsappDisplay);
 setText("contactEmail", SITE.email);
-setText("bookingContact", "Owner WhatsApp: " + whatsappDisplay);
 document.querySelectorAll("[data-social]").forEach((link) => {
   const url = SITE.socials && SITE.socials[link.dataset.social];
   if (url) link.href = url;

@@ -35,7 +35,6 @@ function diffIsoDays(startIso, endIso) {
 }
 
 // Progress and Step Management
-const progBar1 = $("progBar1");
 const progBar2 = $("progBar2");
 const progressLabel = $("progressLabel");
 
@@ -241,7 +240,6 @@ if (declareInput && stagCard) {
 // ============================================================
 const checkinInput = $("checkin");
 const checkoutInput = $("checkout");
-const nightsBadge = $("nightsBadge");
 const nightsCountText = $("nightsCountText");
 const dateDurationDetail = $("dateDurationDetail");
 

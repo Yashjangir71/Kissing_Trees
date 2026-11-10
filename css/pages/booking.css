@@ -1393,15 +1393,6 @@ textarea.form-control {
     grid-row: 2;
     margin: 0;
   }
-  .booking-form-panel .row3 {
-    gap: 8px;
-  }
-  .booking-form-panel .row3 label {
-    font-size: 9px;
-  }
-  .booking-form-panel .row2 {
-    grid-template-columns: 1fr;
-  }
   .booking-topline {
     align-items: flex-start;
     flex-direction: column;

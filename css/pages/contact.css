@@ -350,13 +350,6 @@
   pointer-events: none;
 }
 
-.detail-location {
-  display: grid;
-}
-
-.detail-location .location-copy {
-  padding: 10px 0;
-}
 
 /* Responsive Breakpoints */
 @media (max-width: 860px) {

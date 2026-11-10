@@ -188,13 +188,6 @@ h3 {
   letter-spacing: -0.03em;
 }
 
-.section-shell {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding-left: clamp(22px, 7vw, 100px);
-  padding-right: clamp(22px, 7vw, 100px);
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
