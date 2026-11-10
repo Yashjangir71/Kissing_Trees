@@ -17,7 +17,7 @@
     />
     <link rel="stylesheet" href="css/style.css" />
   </head>
-  <body class="detail-page">
+  <body class="detail-page gallery-page">
     <header class="topbar">
       <a class="wordmark" href="index.html" aria-label="Kissing Trees home">
         <span class="wordmark-icon">KT</span>
@@ -55,117 +55,280 @@
       </section>
       <section class="detail-content gallery-page-content">
         <div class="gallery-heading">
-          <div>
+          <div class="gallery-heading-copy">
             <span class="detail-index">01 / THE HOUSE</span>
             <h2>Look around<br /><em>at your pace.</em></h2>
+            <p class="gallery-helper-note">
+              Click any photograph to view it larger.
+            </p>
           </div>
-          <p>Click any photograph to view it larger.</p>
-        </div>
-        <div class="editorial-gallery">
-          <div class="gallery-tile tile-courtyard">
-            <img
-              src="assets/property-photos/bathroom.jpeg"
-              alt="Kissing Trees bathroom with handmade details"
-            />
-            <span>01 / Bathroom</span>
-          </div>
-          <div class="gallery-tile tile-living">
-            <img
-              src="assets/property-photos/wall-art.jpeg"
-              alt="Handmade wall art at Kissing Trees"
-            />
-            <span>02 / Wall art</span>
-          </div>
-          <div class="gallery-tile tile-garden">
-            <img
-              src="assets/property-photos/bedroom-bed.jpeg"
-              alt="Kissing Trees bedroom"
-            />
-            <span>03 / Bedroom</span>
-          </div>
-          <div class="gallery-tile tile-sunset">
-            <img
-              src="assets/property-photos/bedroom-wide.jpeg"
-              alt="Wide view of the Kissing Trees bedroom"
-            />
-            <span>04 / Bedroom view</span>
-          </div>
-          <div class="gallery-tile tile-bedroom">
-            <img
-              src="assets/property-photos/thatched-ceiling.jpeg"
-              alt="Thatched ceiling and fan at Kissing Trees"
-            />
-            <span>05 / Thatched ceiling</span>
-          </div>
-          <div class="gallery-tile tile-dining">
-            <img
-              src="assets/property-photos/room-entry.jpeg"
-              alt="Room entry at Kissing Trees"
-            />
-            <span>06 / Room entry</span>
-          </div>
-          <div class="gallery-tile">
-            <img
-              src="assets/property-photos/bedroom-detail.jpeg"
-              alt="Bedroom detail at Kissing Trees"
-            />
-            <span>07 / Bedroom detail</span>
-          </div>
-          <div class="gallery-tile">
-            <img
-              src="assets/property-photos/doorway.jpeg"
-              alt="Open doorway at Kissing Trees"
-            />
-            <span>08 / Doorway</span>
-          </div>
-          <div class="gallery-tile">
-            <img
-              src="assets/property-photos/wall-lights.jpeg"
-              alt="Decorative wall lights at Kissing Trees"
-            />
-            <span>09 / Wall lights</span>
-          </div>
-          <div class="gallery-tile">
-            <img
-              src="assets/property-photos/welcome-dog.jpeg"
-              alt="Welcome doorway at Kissing Trees"
-            />
-            <span>10 / Welcome</span>
-          </div>
-          <div class="gallery-tile">
-            <img
-              src="assets/property-photos/coconut-grove.jpeg"
-              alt="Coconut grove around Kissing Trees"
-            />
-            <span>11 / Coconut grove</span>
-          </div>
-          <div class="gallery-tile">
-            <img
-              src="assets/property-photos/house-exterior.jpeg"
-              alt="Kissing Trees house exterior"
-            />
-            <span>12 / House exterior</span>
-          </div>
-          <div class="gallery-tile">
-            <img
-              src="assets/property-photos/bath-detail.jpeg"
-              alt="Bathroom detail at Kissing Trees"
-            />
-            <span>13 / Bath detail</span>
+          <div
+            class="gallery-filters"
+            role="tablist"
+            aria-label="Filter gallery photographs"
+          >
+            <button
+              class="filter-pill is-active"
+              type="button"
+              data-filter="all"
+              role="tab"
+              aria-selected="true"
+            >
+              All (13)
+            </button>
+            <button
+              class="filter-pill"
+              type="button"
+              data-filter="interiors"
+              role="tab"
+              aria-selected="false"
+            >
+              Interiors &amp; Bedrooms
+            </button>
+            <button
+              class="filter-pill"
+              type="button"
+              data-filter="details"
+              role="tab"
+              aria-selected="false"
+            >
+              Handmade Details
+            </button>
+            <button
+              class="filter-pill"
+              type="button"
+              data-filter="outdoors"
+              role="tab"
+              aria-selected="false"
+            >
+              The Grove &amp; Outdoors
+            </button>
           </div>
         </div>
+
+        <div class="editorial-gallery" id="galleryGrid">
+          <figure
+            class="gallery-tile gallery-card--tall"
+            data-category="interiors"
+          >
+            <div class="gallery-media">
+              <img
+                src="assets/property-photos/bathroom.jpeg"
+                alt="Kissing Trees bathroom with handmade details"
+                loading="lazy"
+              />
+            </div>
+            <figcaption class="gallery-caption">01 / Bathroom</figcaption>
+          </figure>
+
+          <figure
+            class="gallery-tile gallery-card--tall"
+            data-category="details"
+          >
+            <div class="gallery-media">
+              <img
+                src="assets/property-photos/wall-art.jpeg"
+                alt="Handmade wall art at Kissing Trees"
+                loading="lazy"
+              />
+            </div>
+            <figcaption class="gallery-caption">02 / Wall art</figcaption>
+          </figure>
+
+          <figure
+            class="gallery-tile gallery-card--wide gallery-card--bedroom"
+            data-category="interiors"
+          >
+            <div class="gallery-media">
+              <img
+                src="assets/property-photos/bedroom-bed.jpeg"
+                alt="Kissing Trees bedroom"
+                loading="lazy"
+              />
+            </div>
+            <figcaption class="gallery-caption">03 / Bedroom</figcaption>
+          </figure>
+
+          <figure
+            class="gallery-tile gallery-card--wide"
+            data-category="interiors"
+          >
+            <div class="gallery-media">
+              <img
+                src="assets/property-photos/bedroom-wide.jpeg"
+                alt="Wide view of the Kissing Trees bedroom"
+                loading="lazy"
+              />
+            </div>
+            <figcaption class="gallery-caption">04 / Bedroom view</figcaption>
+          </figure>
+
+          <figure
+            class="gallery-tile gallery-card--tall"
+            data-category="details"
+          >
+            <div class="gallery-media">
+              <img
+                src="assets/property-photos/thatched-ceiling.jpeg"
+                alt="Thatched ceiling and fan at Kissing Trees"
+                loading="lazy"
+              />
+            </div>
+            <figcaption class="gallery-caption">05 / Thatched ceiling</figcaption>
+          </figure>
+
+          <figure
+            class="gallery-tile gallery-card--tall"
+            data-category="interiors"
+          >
+            <div class="gallery-media">
+              <img
+                src="assets/property-photos/room-entry.jpeg"
+                alt="Room entry at Kissing Trees"
+                loading="lazy"
+              />
+            </div>
+            <figcaption class="gallery-caption">06 / Room entry</figcaption>
+          </figure>
+
+          <figure
+            class="gallery-tile gallery-card--tall"
+            data-category="interiors"
+          >
+            <div class="gallery-media">
+              <img
+                src="assets/property-photos/bedroom-detail.jpeg"
+                alt="Bedroom detail at Kissing Trees"
+                loading="lazy"
+              />
+            </div>
+            <figcaption class="gallery-caption">07 / Bedroom detail</figcaption>
+          </figure>
+
+          <figure
+            class="gallery-tile gallery-card--tall"
+            data-category="details"
+          >
+            <div class="gallery-media">
+              <img
+                src="assets/property-photos/doorway.jpeg"
+                alt="Open doorway at Kissing Trees"
+                loading="lazy"
+              />
+            </div>
+            <figcaption class="gallery-caption">08 / Doorway</figcaption>
+          </figure>
+
+          <figure
+            class="gallery-tile gallery-card--wide"
+            data-category="details"
+          >
+            <div class="gallery-media">
+              <img
+                src="assets/property-photos/wall-lights.jpeg"
+                alt="Decorative wall lights at Kissing Trees"
+                loading="lazy"
+              />
+            </div>
+            <figcaption class="gallery-caption">09 / Wall lights</figcaption>
+          </figure>
+
+          <figure
+            class="gallery-tile gallery-card--tall"
+            data-category="outdoors"
+          >
+            <div class="gallery-media">
+              <img
+                src="assets/property-photos/welcome-dog.jpeg"
+                alt="Welcome doorway at Kissing Trees"
+                loading="lazy"
+              />
+            </div>
+            <figcaption class="gallery-caption">10 / Welcome</figcaption>
+          </figure>
+
+          <figure
+            class="gallery-tile gallery-card--wide"
+            data-category="outdoors"
+          >
+            <div class="gallery-media">
+              <img
+                src="assets/property-photos/coconut-grove.jpeg"
+                alt="Coconut grove around Kissing Trees"
+                loading="lazy"
+              />
+            </div>
+            <figcaption class="gallery-caption">11 / Coconut grove</figcaption>
+          </figure>
+
+          <figure
+            class="gallery-tile gallery-card--wide gallery-card--exterior"
+            data-category="outdoors"
+          >
+            <div class="gallery-media">
+              <img
+                src="assets/property-photos/house-exterior.jpeg"
+                alt="Kissing Trees house exterior"
+                loading="lazy"
+              />
+            </div>
+            <figcaption class="gallery-caption">12 / House exterior</figcaption>
+          </figure>
+
+          <figure
+            class="gallery-tile gallery-card--tall"
+            data-category="details"
+          >
+            <div class="gallery-media">
+              <img
+                src="assets/property-photos/bath-detail.jpeg"
+                alt="Bathroom detail at Kissing Trees"
+                loading="lazy"
+              />
+            </div>
+            <figcaption class="gallery-caption">13 / Bath detail</figcaption>
+          </figure>
+        </div>
+
         <p class="sample-stamp">
           Property photography supplied for Kissing Trees.
         </p>
       </section>
-      <div class="gallery-lightbox" id="galleryLightbox" hidden>
+
+      <div
+        class="gallery-lightbox"
+        id="galleryLightbox"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Full-resolution photo viewer"
+        hidden
+      >
         <button class="lightbox-close" type="button" aria-label="Close image">
-          ×
+          ✕
+        </button>
+        <button
+          class="lightbox-nav lightbox-prev"
+          type="button"
+          aria-label="Previous photograph"
+        >
+          ←
         </button>
         <figure>
-          <img src="" alt="" />
-          <figcaption></figcaption>
+          <div class="lightbox-media">
+            <img src="" alt="" />
+          </div>
+          <figcaption>
+            <span class="lightbox-title"></span>
+            <span class="lightbox-counter"></span>
+          </figcaption>
         </figure>
+        <button
+          class="lightbox-nav lightbox-next"
+          type="button"
+          aria-label="Next photograph"
+        >
+          →
+        </button>
       </div>
     </main>
     <footer class="site-footer">

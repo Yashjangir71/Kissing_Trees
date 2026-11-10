@@ -134,12 +134,72 @@ if (window.matchMedia("(hover: hover)").matches) {
   });
 }
 
+const galleryGrid = document.getElementById("galleryGrid");
+const galleryTiles = Array.from(document.querySelectorAll(".gallery-tile"));
+const filterButtons = Array.from(
+  document.querySelectorAll(".gallery-filters .filter-pill"),
+);
+
+if (galleryGrid && filterButtons.length && galleryTiles.length) {
+  filterButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const targetFilter = btn.dataset.filter || "all";
+      filterButtons.forEach((pill) => {
+        const active = pill === btn;
+        pill.classList.toggle("is-active", active);
+        pill.setAttribute("aria-selected", active ? "true" : "false");
+      });
+
+      galleryTiles.forEach((tile) => {
+        const matches =
+          targetFilter === "all" || tile.dataset.category === targetFilter;
+        tile.hidden = !matches;
+        tile.classList.remove("is-entering");
+        if (matches) {
+          void tile.offsetWidth;
+          tile.classList.add("is-entering");
+        }
+      });
+    });
+  });
+}
+
 const galleryLightbox = document.getElementById("galleryLightbox");
 if (galleryLightbox) {
   const lightboxImage = galleryLightbox.querySelector("img");
-  const lightboxCaption = galleryLightbox.querySelector("figcaption");
+  const lightboxTitle =
+    galleryLightbox.querySelector(".lightbox-title") ||
+    galleryLightbox.querySelector("figcaption");
+  const lightboxCounter = galleryLightbox.querySelector(".lightbox-counter");
   const closeButton = galleryLightbox.querySelector(".lightbox-close");
+  const prevButton = galleryLightbox.querySelector(".lightbox-prev");
+  const nextButton = galleryLightbox.querySelector(".lightbox-next");
   let lastTrigger = null;
+  let activeIndex = 0;
+
+  const getVisibleTiles = () => galleryTiles.filter((tile) => !tile.hidden);
+
+  const showSlide = (index) => {
+    const visible = getVisibleTiles();
+    if (!visible.length) return;
+    activeIndex = (index + visible.length) % visible.length;
+    const tile = visible[activeIndex];
+    const image = tile.querySelector("img");
+    const captionEl =
+      tile.querySelector(".gallery-caption") || tile.querySelector("span");
+    if (!image) return;
+    lightboxImage.src = image.src;
+    lightboxImage.alt = image.alt;
+    const titleText = captionEl ? captionEl.textContent.trim() : image.alt;
+    if (lightboxTitle) lightboxTitle.textContent = titleText;
+    if (lightboxCounter) {
+      lightboxCounter.textContent = `${activeIndex + 1} / ${visible.length}`;
+    }
+    const multi = visible.length > 1;
+    if (prevButton) prevButton.hidden = !multi;
+    if (nextButton) nextButton.hidden = !multi;
+  };
+
   const closeLightbox = () => {
     galleryLightbox.hidden = true;
     lightboxImage.src = "";
@@ -152,19 +212,19 @@ if (galleryLightbox) {
       lastTrigger = null;
     }
   };
+
   const openLightbox = (tile) => {
-    const image = tile.querySelector("img");
-    const caption = tile.querySelector("span");
-    if (!image) return;
+    const visible = getVisibleTiles();
+    const index = visible.indexOf(tile);
+    if (index === -1) return;
     lastTrigger = tile;
-    lightboxImage.src = image.src;
-    lightboxImage.alt = image.alt;
-    lightboxCaption.textContent = caption ? caption.textContent : image.alt;
+    showSlide(index);
     galleryLightbox.hidden = false;
     document.body.style.overflow = "hidden";
     if (closeButton) closeButton.focus();
   };
-  document.querySelectorAll(".gallery-tile").forEach((tile) => {
+
+  galleryTiles.forEach((tile) => {
     tile.tabIndex = 0;
     tile.setAttribute("role", "button");
     tile.addEventListener("click", () => openLightbox(tile));
@@ -175,11 +235,29 @@ if (galleryLightbox) {
       }
     });
   });
+
+  if (prevButton) {
+    prevButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      showSlide(activeIndex - 1);
+    });
+  }
+  if (nextButton) {
+    nextButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      showSlide(activeIndex + 1);
+    });
+  }
   if (closeButton) closeButton.addEventListener("click", closeLightbox);
   galleryLightbox.addEventListener("click", (event) => {
-    if (event.target === galleryLightbox) closeLightbox();
+    if (!event.target.closest(".lightbox-media, button, figcaption")) {
+      closeLightbox();
+    }
   });
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && !galleryLightbox.hidden) closeLightbox();
+    if (galleryLightbox.hidden) return;
+    if (event.key === "Escape") closeLightbox();
+    else if (event.key === "ArrowLeft") showSlide(activeIndex - 1);
+    else if (event.key === "ArrowRight") showSlide(activeIndex + 1);
   });
 }
