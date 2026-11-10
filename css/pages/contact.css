@@ -1,137 +1,335 @@
 /* ============================================================
    KISSING TREES — CONTACT PAGE
+   Palette: Cream (--foam, --sand, #fffdf8, #faf6ee, #f8f3e8, #f7ede3),
+   Terracotta (--pine, --jade, #9B4433), Warm Charcoal (--ink, --muted, #4a3e35)
    ============================================================ */
 .contact-layout {
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: start;
 }
 
 .contact-layout h2 {
   font-size: clamp(34px, 4vw, 50px);
-  margin: 16px 0;
+  margin: 14px 0 12px;
+}
+
+.contact-intro-copy {
+  margin: 0 0 24px;
+  font-size: 13.5px;
+  line-height: 1.65;
+  max-width: 400px;
+}
+
+/* Left Column: Subtle Tone-on-Tone Backdrop Cards */
+.contact-cards {
+  display: grid;
+  gap: 14px;
 }
 
 .contact-card {
   display: grid;
-  gap: 5px;
-  padding: 17px 0;
-  border-top: 1px solid var(--line);
+  gap: 6px;
+  padding: 20px 22px;
+  background: linear-gradient(180deg, #fffdf8 0%, #faf6ee 100%);
+  border: 1px solid #e4d8c5;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(32, 23, 19, 0.04);
+  transition:
+    transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.24s ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(164, 74, 50, 0.32);
+  background: var(--paper);
+  box-shadow: 0 12px 28px rgba(32, 23, 19, 0.07);
 }
 
 .contact-card small {
   display: block;
-  font-size: 8px;
-  letter-spacing: 0.14em;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   color: var(--muted);
-  margin-bottom: 7px;
+  margin: 0 0 2px;
+  text-transform: uppercase;
 }
 
 .contact-card strong {
-  color: var(--pine);
-  font: 500 20px var(--serif);
+  color: var(--ink);
+  font: 500 20px/1.3 var(--serif);
+  word-break: break-word;
 }
 
+/* Secondary Outlined CTA Button on Left Contact Card */
 .contact-card .button {
   justify-self: start;
-  margin-top: 9px;
+  margin-top: 10px;
+  padding: 12px 20px;
+  background: var(--paper);
+  color: var(--pine) !important;
+  border: 1.5px solid rgba(164, 74, 50, 0.42);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  box-shadow: 0 3px 10px rgba(32, 23, 19, 0.04);
+  transition:
+    transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.22s ease,
+    box-shadow 0.26s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.contact-card .button:hover {
+  background: var(--pine);
+  border-color: var(--pine);
+  color: var(--paper) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(164, 74, 50, 0.24);
+}
+
+.contact-card .button:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(164, 74, 50, 0.2),
+    0 8px 18px rgba(164, 74, 50, 0.16);
+}
+
+.contact-card .button:active {
+  transform: translateY(0);
+}
+
+/* Right Column: Boutique Form Panel */
 .contact-side {
-  padding: 25px;
-  background: #f7ede3;
+  padding: clamp(24px, 3.6vw, 36px);
+  background: linear-gradient(155deg, #fffdf8 0%, #f8f3e8 100%);
+  border: 1px solid #dfd0ba;
+  border-radius: 16px;
+  box-shadow: 0 14px 36px rgba(32, 23, 19, 0.06);
+}
+
+.contact-side-head {
+  padding-bottom: 18px;
+  border-bottom: 1px solid #ede3d4;
+}
+
+.contact-side-head .eyebrow {
+  margin: 0 0 10px;
 }
 
 .contact-side h3 {
-  font: 500 23px var(--serif);
-  color: var(--pine);
+  font: 500 clamp(24px, 2.6vw, 28px)/1.18 var(--serif);
+  color: var(--ink);
+  margin: 0 0 8px;
 }
 
-.contact-side > p:not(.eyebrow) {
-  font-size: 12px;
+.contact-side-head > p:not(.eyebrow) {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
   color: var(--muted);
 }
 
 .contact-form {
   display: grid;
-  gap: 13px;
-  margin: 22px 0 25px;
+  gap: 16px;
+  margin: 22px 0 24px;
 }
 
 .contact-form label {
   display: grid;
-  gap: 5px;
-  color: var(--pine);
+  gap: 7px;
+  color: #5e4e44;
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  transition:
+    color 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.contact-form label:focus-within {
+  color: var(--pine);
+  transform: translateY(-1px);
 }
 
 .contact-form input:not([type="checkbox"]),
 .contact-form textarea {
   width: 100%;
   box-sizing: border-box;
-  border: 1px solid #e5d5c6;
-  border-radius: 2px;
-  padding: 11px 12px;
-  background: #f8faf5;
+  border: 1.5px solid #e4d8c5;
+  border-radius: 10px;
+  padding: 13px 15px;
+  background: #faf8f5;
   color: var(--ink);
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 400;
   letter-spacing: 0;
-  outline: 0;
+  line-height: 1.5;
+  outline: none;
   resize: vertical;
+  box-shadow: inset 0 1px 2px rgba(32, 23, 19, 0.03);
   transition:
-    border-color 0.2s ease,
-    background 0.2s ease;
+    border-color 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.contact-form textarea {
+  min-height: 112px;
+}
+
+.contact-form input:not([type="checkbox"]):hover,
+.contact-form textarea:hover {
+  border-color: #d9cebf;
+  background: var(--paper);
 }
 
 .contact-form input:not([type="checkbox"]):focus,
 .contact-form textarea:focus {
+  outline: none;
   border-color: var(--pine);
-  background: #fff;
+  background: var(--paper);
+  box-shadow:
+    0 0 0 3px rgba(164, 74, 50, 0.14),
+    0 6px 16px rgba(32, 23, 19, 0.04);
 }
 
 .contact-form input::placeholder,
 .contact-form textarea::placeholder {
   color: #917f75;
+  transition: opacity 0.2s ease;
 }
 
+.contact-form input:focus::placeholder,
+.contact-form textarea:focus::placeholder {
+  opacity: 0.6;
+}
+
+/* Primary Form Submit CTA Button */
 .contact-form .button {
-  border: 0;
-  cursor: pointer;
   justify-self: start;
+  margin-top: 4px;
+  padding: 15px 26px;
+  min-height: 48px;
+  background: var(--pine);
+  border: 1px solid var(--pine);
+  border-radius: 10px;
+  color: var(--paper) !important;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(164, 74, 50, 0.22);
+  transition:
+    transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.26s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.contact-form .button:hover:not(:disabled) {
+  background: var(--jade);
+  border-color: var(--jade);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(164, 74, 50, 0.3);
+}
+
+.contact-form .button:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(164, 74, 50, 0.24),
+    0 10px 22px rgba(164, 74, 50, 0.22);
+}
+
+.contact-form .button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(164, 74, 50, 0.2);
+}
+
+.contact-form .button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+  transform: none;
+}
+
+.contact-card .button span,
+.contact-form .button span {
+  transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.contact-card .button:hover span,
+.contact-form .button:hover:not(:disabled) span {
+  transform: translate(2px, -2px);
+}
+
+/* Status Banner & Links (Palette-Aligned) */
 .contact-form-status {
-  margin-top: 14px;
-  padding: 13px 15px;
-  border-radius: 6px;
-  font-size: 12px;
-  line-height: 1.55;
+  margin-top: 4px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  line-height: 1.6;
   border: 1px solid #dccab2;
-  background: #fffdf8;
+  background: #faf6ee;
   color: #4a3e35;
 }
 
 .contact-form-status.is-success {
-  background: #f4faf5;
-  border-color: #b8dcc0;
-  color: #1e4f28;
+  background: #f8eee4;
+  border-color: #d9cebf;
+  border-left: 3px solid var(--pine);
+  color: var(--ink);
 }
 
 .contact-form-status.is-error {
   background: #faf0ee;
   border-color: #e6b6af;
-  color: #7a2c20;
+  color: #9B4433;
 }
 
 .contact-status-action {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   margin-top: 8px;
   font-weight: 700;
   color: var(--pine);
-  text-decoration: underline;
+  border-bottom: 1.5px solid rgba(164, 74, 50, 0.4);
+  padding-bottom: 1px;
+  transition:
+    color 0.22s ease,
+    border-color 0.22s ease,
+    transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.contact-status-action:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+  transform: translateY(-1px);
+}
+
+.contact-status-action:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(164, 74, 50, 0.2);
+  border-radius: 3px;
+}
+
+/* Tone-on-Tone Callout inside Form Card */
+.contact-side .detail-callout {
+  margin: 0;
+  padding: 16px 18px;
+  background: #f8eee4;
+  border: 1px solid #e6d4b8;
+  border-left: 3px solid var(--pine);
+  border-radius: 10px;
 }
 
 .contact-honeypot {
@@ -149,12 +347,57 @@
   padding: 10px 0;
 }
 
-@media (max-width: 760px) {
+/* Responsive Breakpoints */
+@media (max-width: 860px) {
   .contact-layout {
     grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 48px 20px 64px;
   }
-  .contact-side {
-    padding: 20px;
+  .contact-intro-copy {
+    margin-bottom: 20px;
   }
 }
 
+@media (max-width: 560px) {
+  .contact-layout {
+    padding: 36px 16px 56px;
+    gap: 26px;
+  }
+  .contact-card {
+    padding: 18px;
+    border-radius: 12px;
+  }
+  .contact-card strong {
+    font-size: 18px;
+  }
+  .contact-side {
+    padding: 22px 18px;
+    border-radius: 14px;
+  }
+  .contact-form input:not([type="checkbox"]),
+  .contact-form textarea {
+    font-size: 16px;
+    padding: 12px 14px;
+  }
+  .contact-card .button,
+  .contact-form .button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-card,
+  .contact-card .button,
+  .contact-form .button,
+  .contact-card .button span,
+  .contact-form .button span,
+  .contact-form label,
+  .contact-form input:not([type="checkbox"]),
+  .contact-form textarea,
+  .contact-status-action {
+    transition: none !important;
+    transform: none !important;
+  }
+}

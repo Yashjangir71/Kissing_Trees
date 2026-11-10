@@ -401,9 +401,10 @@
   border-radius: 50%;
   color: #f0e6dc;
   transition:
-    color 0.2s ease,
-    background 0.2s ease,
-    border-color 0.2s ease;
+    color 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .social-links a:hover,
@@ -411,6 +412,7 @@
   border-color: #f0e6dc;
   background: #f0e6dc;
   color: #1c1613;
+  transform: translateY(-2px);
 }
 
 .social-links svg {
