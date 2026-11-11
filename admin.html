@@ -12,7 +12,7 @@
       href="https://fonts.googleapis.com/css2?family=Briem+Hand:wght@300;400;500;600;700;800;900&family=Delius+Swash+Caps&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/style.css?v=20261110" />
+    <link rel="stylesheet" href="css/style.css?v=20261111" />
   </head>
   <body class="admin-page">
     <header class="topbar">
@@ -30,137 +30,1278 @@
       <nav class="main-nav">
         <a href="index.html">Public website</a>
         <a href="booking.html">Booking page</a>
-        <button id="logoutBtn" class="nav-login-out" type="button" hidden>
-          Sign out
-        </button>
       </nav>
     </header>
+
     <main class="dashboard-main">
+      <!-- SECTION 1: DEMO LOGIN -->
       <section id="loginScreen" class="login-screen">
         <div class="login-art">
           <span class="aside-art-label">PRIVATE HOST ACCESS</span>
         </div>
         <div class="login-content">
-          <p class="eyebrow">OWNER ACCESS</p>
+          <p class="eyebrow">01 · HOST &amp; CARETAKER DESK</p>
           <h1>
             Welcome
             <br />
             <em>back.</em>
           </h1>
-          <p>Sign in to view local booking requests.</p>
+          <p>Choose your role and enter the demo password to continue.</p>
+
           <form id="ownerLogin">
+            <fieldset class="role-switch-group">
+              <legend>Select role</legend>
+              <div class="role-switch">
+                <label class="role-option">
+                  <input
+                    id="roleOwner"
+                    type="radio"
+                    name="demoRole"
+                    value="owner"
+                    checked
+                  />
+                  <span>
+                    <strong>Owner</strong>
+                    <small>Sees everything</small>
+                  </span>
+                </label>
+                <label class="role-option">
+                  <input
+                    id="roleCaretaker"
+                    type="radio"
+                    name="demoRole"
+                    value="caretaker"
+                  />
+                  <span>
+                    <strong>Caretaker</strong>
+                    <small>Requests &amp; Calendar only</small>
+                  </span>
+                </label>
+              </div>
+            </fieldset>
+
             <label>
-              Owner ID
-              <input id="ownerId" autocomplete="username" required />
-            </label>
-            <label>
-              Password
+              Demo Password
               <input
                 id="ownerPassword"
                 type="password"
                 autocomplete="current-password"
+                placeholder="Enter admin123"
                 required
               />
             </label>
+
             <button class="button" type="submit">
-              Sign in
+              Enter Admin Panel
               <span>↗</span>
             </button>
             <p id="loginError" class="login-error" role="alert"></p>
           </form>
+
           <div class="security-note">
-            <strong>DEMO LOGIN — NOT SECURE</strong>
+            <strong>DEMO LOGIN ONLY</strong>
             <p>
-              This static login only hides the page. Credentials and booking
-              data are visible in browser files and localStorage. Do not use
-              real guest data or rely on this for production security.
+              Demo login only — real login security comes with the backend.
             </p>
             <small>
-              Sample ID:
-              <code id="demoUser"></code>
-              · Sample password:
-              <code id="demoPassword"></code>
+              Demo password:
+              <code id="demoPassword">admin123</code>
+              · Owner sees all sections; Caretaker sees Requests &amp; Calendar only.
             </small>
           </div>
         </div>
       </section>
+
+      <!-- LOGGED-IN ADMIN SHELL (SECTIONS 2–8) -->
       <section id="adminContent" class="admin-content" hidden>
-        <div class="dashboard-heading">
-          <div>
-            <p class="eyebrow">PRIVATE HOST VIEW · THIS BROWSER ONLY</p>
-            <h1>
-              Owner
-              <em>desk.</em>
-            </h1>
-            <p class="dashboard-intro">
-              Review each guest request, check the group profile and decide when
-              you’re ready.
-            </p>
-          </div>
-          <a class="button dashboard-booking-link" href="booking.html">
-            Open booking flow
-            <span>↗</span>
-          </a>
-        </div>
-        <div class="dashboard-notice">
-          <span class="notice-icon">i</span>
-          <p>
-            Requests live in this browser’s localStorage. Approving a request
-            reveals a payment link; it does not process payment. Blocked groups
-            never appear here.
-          </p>
-        </div>
-        <section class="dashboard-section">
-          <div class="table-heading">
-            <div>
-              <p class="eyebrow">INCOMING STAYS</p>
-              <h2>Booking requests</h2>
+        <div class="admin-shell">
+          <div id="sidebarBackdrop" class="sidebar-backdrop" hidden></div>
+
+          <!-- Fixed Left Sidebar (Desktop) / Slide-out Drawer (Mobile) -->
+          <aside class="admin-sidebar" aria-label="Admin sections">
+            <div class="sidebar-header">
+              <a class="sidebar-brand" href="index.html" aria-label="Kissing Trees homepage">
+                <span class="wordmark-icon">KT</span>
+                <span class="sidebar-brand-text">
+                  <strong>Kissing Trees</strong>
+                  <small id="sidebarRoleTag">Owner · Full Access</small>
+                </span>
+              </a>
+              <button
+                id="sidebarCollapseBtn"
+                class="sidebar-collapse-btn"
+                type="button"
+                aria-label="Collapse or expand sidebar"
+                title="Collapse sidebar"
+              >
+                «
+              </button>
             </div>
-            <span class="local-indicator">
-              <i></i>
-              LOCAL DATA
-            </span>
+
+            <nav id="adminNavTabs" class="admin-nav-list" role="tablist">
+              <button
+                id="tab-dashboard"
+                class="admin-nav-btn is-active"
+                type="button"
+                role="tab"
+                data-panel="dashboard"
+                data-owner-only="true"
+                aria-selected="true"
+                title="Dashboard Overview"
+              >
+                <span class="nav-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>
+                </span>
+                <span class="nav-label">Dashboard</span>
+              </button>
+              <button
+                id="tab-requests"
+                class="admin-nav-btn"
+                type="button"
+                role="tab"
+                data-panel="requests"
+                aria-selected="false"
+                title="Booking Requests"
+              >
+                <span class="nav-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16v12H4z"></path><path d="M4 13h4l2 2h4l2-2h4"></path></svg>
+                </span>
+                <span class="nav-label">Booking Requests</span>
+                <span id="navPendingBadge" class="nav-pill-count">0</span>
+              </button>
+              <button
+                id="tab-calendar"
+                class="admin-nav-btn"
+                type="button"
+                role="tab"
+                data-panel="calendar"
+                aria-selected="false"
+                title="Calendar &amp; Bookings"
+              >
+                <span class="nav-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                </span>
+                <span class="nav-label">Calendar &amp; Stays</span>
+              </button>
+              <button
+                id="tab-payments"
+                class="admin-nav-btn"
+                type="button"
+                role="tab"
+                data-panel="payments"
+                data-owner-only="true"
+                aria-selected="false"
+                title="Payments (Demo)"
+              >
+                <span class="nav-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                </span>
+                <span class="nav-label">Payments (Demo)</span>
+              </button>
+              <button
+                id="tab-pricing"
+                class="admin-nav-btn"
+                type="button"
+                role="tab"
+                data-panel="pricing"
+                data-owner-only="true"
+                aria-selected="false"
+                title="Pricing Settings"
+              >
+                <span class="nav-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="17" x2="20" y2="17"></line><circle cx="9" cy="7" r="2.2"></circle><circle cx="15" cy="17" r="2.2"></circle></svg>
+                </span>
+                <span class="nav-label">Pricing Settings</span>
+              </button>
+              <button
+                id="tab-content"
+                class="admin-nav-btn"
+                type="button"
+                role="tab"
+                data-panel="content"
+                data-owner-only="true"
+                aria-selected="false"
+                title="CMS &amp; Editorial"
+              >
+                <span class="nav-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+                </span>
+                <span class="nav-label">CMS &amp; Editorial</span>
+              </button>
+              <button
+                id="tab-reports"
+                class="admin-nav-btn"
+                type="button"
+                role="tab"
+                data-panel="reports"
+                data-owner-only="true"
+                aria-selected="false"
+                title="Logs, Guests &amp; Reports"
+              >
+                <span class="nav-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="13" y2="17"></line></svg>
+                </span>
+                <span class="nav-label">Logs, Guests &amp; Reports</span>
+              </button>
+            </nav>
+
+            <div class="sidebar-footer">
+              <span class="sidebar-storage-note">LOCAL BROWSER DEMO</span>
+              <a class="sidebar-link-btn" href="index.html">
+                <span class="nav-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </span>
+                <span class="nav-label">View Live Site ↗</span>
+              </a>
+              <button id="logoutBtn" class="sidebar-logout-btn" type="button" hidden>
+                <span class="nav-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                </span>
+                <span class="nav-label">Sign Out / Logout</span>
+              </button>
+            </div>
+          </aside>
+
+          <!-- Main Panel Workspace -->
+          <div class="admin-workspace">
+            <div class="admin-topbar">
+              <div class="admin-topbar-left">
+                <button
+                  id="mobileSidebarBtn"
+                  class="admin-drawer-toggle"
+                  type="button"
+                  aria-label="Open navigation menu"
+                >
+                  ☰
+                </button>
+                <strong id="adminTopTitle" class="admin-topbar-title">Dashboard Overview</strong>
+                <span id="activeRoleBadge" class="role-badge" hidden>OWNER</span>
+              </div>
+              <div class="admin-topbar-actions">
+                <a class="admin-btn-outline" href="booking.html">
+                  + Booking Page ↗
+                </a>
+                <a class="admin-btn-outline" href="index.html">
+                  Public Website ↗
+                </a>
+              </div>
+            </div>
+
+            <div class="admin-workspace-inner">
+            <!-- SECTION 2: DASHBOARD -->
+            <section
+              id="panel-dashboard"
+              class="workspace-panel"
+              data-panel-view="dashboard"
+              data-owner-only="true"
+            >
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">02 · OVERVIEW AT A GLANCE</p>
+                  <h2>Dashboard</h2>
+                </div>
+                <span id="dashMonthLabel" class="month-pill">Current month</span>
+              </div>
+
+              <div class="kpi-grid">
+                <article class="kpi-card">
+                  <span class="kpi-label">PENDING REQUESTS</span>
+                  <strong id="kpiPending" class="kpi-value">0</strong>
+                  <span class="kpi-sub">Awaiting owner decision</span>
+                </article>
+                <article class="kpi-card">
+                  <span class="kpi-label">TODAY'S CHECK-INS</span>
+                  <strong id="kpiCheckinsToday" class="kpi-value">0</strong>
+                  <span class="kpi-sub">Approved arrivals today</span>
+                </article>
+                <article class="kpi-card">
+                  <span class="kpi-label">TODAY'S CHECK-OUTS</span>
+                  <strong id="kpiCheckoutsToday" class="kpi-value">0</strong>
+                  <span class="kpi-sub">Approved departures today</span>
+                </article>
+                <article class="kpi-card">
+                  <span class="kpi-label">APPROVED THIS MONTH</span>
+                  <strong id="kpiApprovedMonth" class="kpi-value">0</strong>
+                  <span class="kpi-sub">Confirmed monthly stays</span>
+                </article>
+                <article class="kpi-card kpi-card--accent">
+                  <span class="kpi-label">EXPECTED INCOME (MONTH)</span>
+                  <strong id="kpiIncomeMonth" class="kpi-value">₹0</strong>
+                  <span id="kpiIncomeSub" class="kpi-sub">Nights × tariff from settings</span>
+                </article>
+                <article class="kpi-card kpi-card--warn">
+                  <span class="kpi-label">REVIEW NEEDED</span>
+                  <strong id="kpiReviewNeeded" class="kpi-value">0</strong>
+                  <span id="kpiReviewSub" class="kpi-sub">Gate-flagged manual reviews</span>
+                </article>
+              </div>
+
+              <div id="dashAlerts" class="dash-alerts"></div>
+
+              <div class="admin-card">
+                <div class="table-heading">
+                  <div>
+                    <p class="eyebrow">SCHEDULE SNAPSHOT</p>
+                    <h3>Recent &amp; upcoming stays</h3>
+                  </div>
+                </div>
+                <div class="table-frame">
+                  <table class="compact-table">
+                    <thead>
+                      <tr>
+                        <th>Ref</th>
+                        <th>Guest</th>
+                        <th>Dates</th>
+                        <th>Est. Tariff</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="dashUpcomingBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+
+            <!-- SECTION 3: BOOKING REQUESTS -->
+            <section
+              id="panel-requests"
+              class="workspace-panel"
+              data-panel-view="requests"
+              hidden
+            >
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">03 · INCOMING STAYS</p>
+                  <h2>Booking Requests</h2>
+                </div>
+                <div class="requests-toolbar">
+                  <input
+                    id="reqSearch"
+                    class="admin-search-input"
+                    type="search"
+                    placeholder="Search by guest name or phone..."
+                    aria-label="Search booking requests by name or phone"
+                  />
+                </div>
+              </div>
+
+              <div id="reqFilterBar" class="filter-tabs" role="tablist" aria-label="Filter booking requests">
+                <button class="admin-pill is-active" type="button" data-req-filter="ALL">
+                  All (<span id="countAll">0</span>)
+                </button>
+                <button class="admin-pill" type="button" data-req-filter="PENDING">
+                  Pending (<span id="countPending">0</span>)
+                </button>
+                <button class="admin-pill" type="button" data-req-filter="REVIEW">
+                  REVIEW-only (<span id="countReview">0</span>)
+                </button>
+                <button class="admin-pill" type="button" data-req-filter="APPROVED">
+                  Approved (<span id="countApproved">0</span>)
+                </button>
+                <button class="admin-pill" type="button" data-req-filter="DECLINED">
+                  Declined (<span id="countDeclined">0</span>)
+                </button>
+              </div>
+
+              <div class="table-frame">
+                <table id="requestsTable">
+                  <thead>
+                    <tr>
+                      <th>Reference / received</th>
+                      <th>Lead guest / ID</th>
+                      <th>Group / purpose</th>
+                      <th>Dates</th>
+                      <th>Gate review</th>
+                      <th>Owner decision</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="rows"></tbody>
+                </table>
+              </div>
+
+              <div class="dashboard-bottom">
+                <p id="requestsEmptyNotice">
+                  Click any request row to inspect full guest list, gate reason, internal notes &amp; ID photos.
+                </p>
+                <button class="button text-button" id="clearBtn" type="button">
+                  Clear all requests
+                  <span>↗</span>
+                </button>
+              </div>
+            </section>
+
+            <!-- SECTION 4: CALENDAR & BOOKINGS -->
+            <section
+              id="panel-calendar"
+              class="workspace-panel"
+              data-panel-view="calendar"
+              hidden
+            >
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">04 · SCHEDULE &amp; AVAILABILITY</p>
+                  <h2>Calendar &amp; Bookings</h2>
+                </div>
+                <div class="calendar-nav">
+                  <button id="calPrevBtn" class="admin-btn-outline" type="button">
+                    ← Prev
+                  </button>
+                  <strong id="calMonthTitle" class="cal-month-title">Month Year</strong>
+                  <button id="calTodayBtn" class="admin-btn-outline" type="button">
+                    Today
+                  </button>
+                  <button id="calNextBtn" class="admin-btn-outline" type="button">
+                    Next →
+                  </button>
+                </div>
+              </div>
+
+              <div id="calClashAlerts" class="dash-alerts"></div>
+
+              <div class="calendar-layout">
+                <div class="calendar-main-card admin-card">
+                  <div class="cal-legend">
+                    <span><i class="dot dot-approved"></i> Approved stay</span>
+                    <span><i class="dot dot-blocked"></i> Blocked dates</span>
+                    <span><i class="dot dot-clash"></i> Pending clash</span>
+                    <span><i class="dot dot-today"></i> Today</span>
+                  </div>
+                  <div class="cal-weekdays" aria-hidden="true">
+                    <span>Sun</span>
+                    <span>Mon</span>
+                    <span>Tue</span>
+                    <span>Wed</span>
+                    <span>Thu</span>
+                    <span>Fri</span>
+                    <span>Sat</span>
+                  </div>
+                  <div id="calendarGrid" class="calendar-grid"></div>
+                  <div id="calDayInspector" class="day-inspector"></div>
+                </div>
+
+                <div class="calendar-side-col">
+                  <div id="calBlockCard" class="admin-card" data-owner-only="true">
+                    <p class="eyebrow">BLOCK DATES</p>
+                    <h3>Hold dates off-market</h3>
+                    <form id="blockDatesForm" class="stacked-form">
+                      <label>
+                        From date
+                        <input id="blockStart" type="date" required />
+                      </label>
+                      <label>
+                        To date
+                        <input id="blockEnd" type="date" required />
+                      </label>
+                      <label>
+                        Reason
+                        <select id="blockReason" required>
+                          <option value="Personal use">Personal use</option>
+                          <option value="Maintenance">Maintenance</option>
+                          <option value="Other">Other</option>
+                        </select>
+                      </label>
+                      <label>
+                        Note (optional)
+                        <input
+                          id="blockNote"
+                          type="text"
+                          placeholder="e.g. Family visit or roof care"
+                        />
+                      </label>
+                      <button class="button" type="submit">
+                        Block Date Range
+                        <span>↗</span>
+                      </button>
+                      <p id="blockFormStatus" class="form-status-msg"></p>
+                    </form>
+                    <hr class="admin-divider" />
+                    <p class="eyebrow">SAVED BLOCKED RANGES</p>
+                    <div id="blockedRangesList" class="blocked-ranges-list"></div>
+                  </div>
+
+                  <div id="calCaretakerNote" class="dashboard-notice" hidden>
+                    <span class="notice-icon">i</span>
+                    <p>
+                      Caretaker view: inspect occupied dates and update guest
+                      Check-in, Check-out, and ID verification below. Only the
+                      Owner can block or unblock dates.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="admin-card">
+                <div class="table-heading">
+                  <div>
+                    <p class="eyebrow">ARRIVAL &amp; ID CHECKLIST</p>
+                    <h3>Approved Bookings</h3>
+                  </div>
+                </div>
+                <div id="calApprovedList" class="approved-checklist-grid"></div>
+              </div>
+            </section>
+
+            <!-- SECTION 5: PAYMENTS (DEMO) -->
+            <section
+              id="panel-payments"
+              class="workspace-panel"
+              data-panel-view="payments"
+              data-owner-only="true"
+              hidden
+            >
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">05 · DEMO TRACKING ONLY (NO REAL GATEWAY)</p>
+                  <h2>Payments</h2>
+                </div>
+              </div>
+
+              <div class="dashboard-notice">
+                <span class="notice-icon">₹</span>
+                <p>
+                  <strong>DEMO PAYMENT TRACKER:</strong> Records manual
+                  Advance, Balance, and Security Deposit status in your browser
+                  only. Payment links generated below are clearly marked DEMO —
+                  live Razorpay / UPI checkout comes in the backend phase.
+                </p>
+              </div>
+
+              <div class="totals-strip">
+                <article class="kpi-card">
+                  <span class="kpi-label">ADVANCE COLLECTED</span>
+                  <strong id="payTotalAdvance" class="kpi-value">₹0</strong>
+                </article>
+                <article class="kpi-card">
+                  <span class="kpi-label">BALANCE PENDING</span>
+                  <strong id="payTotalBalance" class="kpi-value">₹0</strong>
+                </article>
+                <article class="kpi-card">
+                  <span class="kpi-label">DEPOSITS HELD</span>
+                  <strong id="payTotalDeposits" class="kpi-value">₹0</strong>
+                </article>
+              </div>
+
+              <div class="table-frame">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Booking &amp; Guest</th>
+                      <th>Dates &amp; Stay Tariff</th>
+                      <th>Advance (50%)</th>
+                      <th>Balance (50%)</th>
+                      <th>Security Deposit</th>
+                      <th>Payment Link (DEMO)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="paymentsRows"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- SECTION 6: PRICING SETTINGS -->
+            <section
+              id="panel-pricing"
+              class="workspace-panel"
+              data-panel-view="pricing"
+              data-owner-only="true"
+              hidden
+            >
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">06 · SAVED IN KT_SETTINGS</p>
+                  <h2>Pricing Settings</h2>
+                </div>
+                <div class="panel-actions-row">
+                  <button id="exportSettingsBtn" class="admin-btn-outline" type="button">
+                    Export settings JSON ↗
+                  </button>
+                  <button id="importSettingsBtn" class="admin-btn-outline" type="button">
+                    Import settings JSON
+                  </button>
+                  <input
+                    id="importSettingsFile"
+                    type="file"
+                    accept=".json,application/json"
+                    hidden
+                  />
+                </div>
+              </div>
+
+              <div class="admin-card">
+                <form id="pricingForm" class="settings-form-grid">
+                  <label>
+                    Weekday Tariff (₹ / night · Mon–Thu)
+                    <input id="setWeekday" type="number" min="0" required />
+                  </label>
+                  <label>
+                    Weekend Tariff (₹ / night · Fri–Sun)
+                    <input id="setWeekend" type="number" min="0" required />
+                  </label>
+                  <label>
+                    Season / Holiday Tariff (₹ / night)
+                    <input id="setSeason" type="number" min="0" required />
+                  </label>
+                  <label>
+                    Included Guests
+                    <input id="setIncludedGuests" type="number" min="1" max="20" required />
+                  </label>
+                  <label>
+                    Extra-Guest Charge (₹ / extra guest / night)
+                    <input id="setExtraGuest" type="number" min="0" required />
+                  </label>
+                  <label>
+                    Refundable Security Deposit (₹)
+                    <input id="setSecurityDeposit" type="number" min="0" required />
+                  </label>
+                  <label>
+                    Minimum Nights per Stay
+                    <input id="setMinNights" type="number" min="1" max="30" required />
+                  </label>
+
+                  <div class="settings-form-footer">
+                    <button id="saveSettingsBtn" class="button" type="submit">
+                      Save Pricing Settings
+                      <span>↗</span>
+                    </button>
+                    <button id="resetSettingsBtn" class="admin-btn-outline" type="button">
+                      Reset to SAMPLE defaults
+                    </button>
+                    <span id="settingsStatus" class="form-status-msg" role="status"></span>
+                  </div>
+                </form>
+              </div>
+            </section>
+
+            <!-- SECTION 7: CMS & EDITORIAL CONTENT -->
+            <section
+              id="panel-content"
+              class="workspace-panel"
+              data-panel-view="content"
+              data-owner-only="true"
+              hidden
+            >
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">07 · STRUCTURED SITE EDITOR</p>
+                  <h2>CMS &amp; Editorial Content</h2>
+                </div>
+                <div class="panel-actions-row">
+                  <button id="exportCmsBtn" class="admin-btn-outline" type="button">
+                    Export Content JSON ↗
+                  </button>
+                  <button id="importCmsBtn" class="admin-btn-outline" type="button">
+                    Import Content JSON
+                  </button>
+                  <input
+                    id="importCmsFile"
+                    type="file"
+                    accept=".json,application/json"
+                    hidden
+                  />
+                </div>
+              </div>
+
+              <div class="cms-subnav" id="cmsSubNav" role="tablist">
+                <button class="admin-pill is-active" type="button" data-cms-group="all">
+                  All Sections
+                </button>
+                <button class="admin-pill" type="button" data-cms-group="identity">
+                  Identity &amp; Brand Photo
+                </button>
+                <button class="admin-pill" type="button" data-cms-group="home">
+                  Homepage &amp; Hero Photo
+                </button>
+                <button class="admin-pill" type="button" data-cms-group="about">
+                  About &amp; Host Portrait
+                </button>
+                <button class="admin-pill" type="button" data-cms-group="amenities">
+                  Amenities
+                </button>
+                <button class="admin-pill" type="button" data-cms-group="rules">
+                  Rules &amp; FAQ
+                </button>
+                <button class="admin-pill" type="button" data-cms-group="blog">
+                  Blog &amp; Cover Photos
+                </button>
+                <button class="admin-pill" type="button" data-cms-group="gallery">
+                  Gallery Photos
+                </button>
+              </div>
+
+              <div class="cms-save-bar">
+                <div>
+                  <strong>Live Browser CMS (Auto-Save)</strong>
+                  <span class="small-note">
+                    Edits save automatically into <code>kt_cms</code> and reflect immediately on public pages opened in this browser.
+                  </span>
+                </div>
+                <div class="panel-actions-row">
+                  <button id="saveCmsBtn" class="button" type="button">
+                    Save All Content
+                    <span>↗</span>
+                  </button>
+                  <a class="admin-btn-outline" href="index.html">
+                    View Public Site ↗
+                  </a>
+                  <button id="resetCmsBtn" class="admin-btn-outline" type="button">
+                    Reset Built-in Copy
+                  </button>
+                  <span id="cmsStatus" class="form-status-msg" role="status"></span>
+                </div>
+              </div>
+
+              <div id="cmsProtocolWarning" class="alert-banner alert-banner--warn" hidden>
+                <strong>FILE:// ORIGIN NOTICE:</strong>
+                <span>
+                  You opened <code>admin.html</code> directly from disk (<code>file://</code>). Some browsers isolate <code>localStorage</code> per file instead of sharing it with <code>index.html</code> — open the site over a local server (<code>http://localhost</code>) or deployed site so CMS changes apply across all user pages.
+                </span>
+              </div>
+
+              <div class="cms-sections-stack">
+                <!-- 7A: Property Identity & Operations -->
+                <article class="admin-card cms-group-card" data-cms-card="identity">
+                  <p class="eyebrow">01 · PROPERTY IDENTITY &amp; CONTACT</p>
+                  <h3>Site-wide details</h3>
+                  <div class="settings-form-grid">
+                    <label>
+                      Property Name
+                      <input id="cmsName" type="text" />
+                    </label>
+                    <label>
+                      Tagline
+                      <input id="cmsTagline" type="text" />
+                    </label>
+                    <label>
+                      Location Line
+                      <input id="cmsLocation" type="text" />
+                    </label>
+                    <label>
+                      Nearby Landscape Note
+                      <input id="cmsNearby" type="text" />
+                    </label>
+                    <label>
+                      Owner WhatsApp (SAMPLE)
+                      <input id="cmsWhatsapp" type="text" />
+                    </label>
+                    <label>
+                      Contact Email (SAMPLE)
+                      <input id="cmsEmail" type="email" />
+                    </label>
+                    <label>
+                      Check-in Time
+                      <input id="cmsCheckIn" type="text" />
+                    </label>
+                    <label>
+                      Check-out Time
+                      <input id="cmsCheckOut" type="text" />
+                    </label>
+                    <label>
+                      Max Guests Capacity
+                      <input id="cmsMaxGuests" type="number" min="1" max="30" />
+                    </label>
+                    <label>
+                      Approval Response Window
+                      <input id="cmsApprovalHours" type="text" />
+                    </label>
+                    <label>
+                      Instagram URL
+                      <input id="cmsInstagram" type="url" />
+                    </label>
+                    <label>
+                      X / Twitter URL
+                      <input id="cmsX" type="url" />
+                    </label>
+                    <label>
+                      Facebook URL
+                      <input id="cmsFacebook" type="url" />
+                    </label>
+                  </div>
+                  <hr class="admin-divider" />
+                  <div id="cmsChatLogoSlot"></div>
+                </article>
+
+                <!-- 7B: Homepage Editorial & Hero Photo -->
+                <article class="admin-card cms-group-card" data-cms-card="home">
+                  <p class="eyebrow">02 · HOMEPAGE (INDEX.HTML)</p>
+                  <h3>Hero Photo, Copy &amp; Feature Cards</h3>
+                  <div id="cmsHomeHeroPhotoSlot"></div>
+                  <hr class="admin-divider" />
+                  <div class="settings-form-grid">
+                    <label>
+                      Hero Eyebrow
+                      <input id="cmsHeroEyebrow" type="text" />
+                    </label>
+                    <label>
+                      Closing CTA Subtext
+                      <input id="cmsCtaSubtext" type="text" />
+                    </label>
+                    <label class="full-span">
+                      Hero Lead Copy
+                      <textarea id="cmsHeroLead" rows="2"></textarea>
+                    </label>
+                    <label class="full-span">
+                      Hero Supporting Text
+                      <textarea id="cmsHeroSubtext" rows="2"></textarea>
+                    </label>
+                    <label class="full-span">
+                      Countryside Intro Lead
+                      <textarea id="cmsIntroLead" rows="2"></textarea>
+                    </label>
+                    <label class="full-span">
+                      Countryside Intro Body
+                      <textarea id="cmsIntroBody" rows="2"></textarea>
+                    </label>
+                  </div>
+                  <div id="cmsHighlightsEditor" class="cms-repeat-list"></div>
+                </article>
+
+                <!-- 7C: About, Host Portrait & Hosting Promise -->
+                <article class="admin-card cms-group-card" data-cms-card="about">
+                  <p class="eyebrow">03 · ABOUT PAGE (ABOUT.HTML)</p>
+                  <h3>Host Portrait, Story &amp; Hosting Promise</h3>
+                  <div id="cmsAboutHostPhotoSlot"></div>
+                  <div class="settings-form-grid" style="margin-top:12px;">
+                    <label>
+                      Host Badge Label
+                      <input id="cmsHostPhotoTag" type="text" />
+                    </label>
+                    <label>
+                      Host Portrait Caption
+                      <input id="cmsHostPhotoCaption" type="text" />
+                    </label>
+                    <label class="full-span">
+                      Host Portrait Alt Text
+                      <input id="cmsHostPhotoAlt" type="text" />
+                    </label>
+                  </div>
+                  <hr class="admin-divider" />
+                  <div class="settings-form-grid">
+                    <label class="full-span">
+                      About Hero Subtitle
+                      <input id="cmsAboutHeroSubtext" type="text" />
+                    </label>
+                    <label class="full-span">
+                      Intro Paragraph 1
+                      <textarea id="cmsAboutP1" rows="2"></textarea>
+                    </label>
+                    <label class="full-span">
+                      Intro Paragraph 2
+                      <textarea id="cmsAboutP2" rows="2"></textarea>
+                    </label>
+                    <label class="full-span">
+                      Hosting Promise Callout
+                      <input id="cmsAboutPromise" type="text" />
+                    </label>
+                    <label class="full-span">
+                      Host Story Paragraph 1
+                      <textarea id="cmsFounderP1" rows="2"></textarea>
+                    </label>
+                    <label class="full-span">
+                      Host Story Paragraph 2
+                      <textarea id="cmsFounderP2" rows="2"></textarea>
+                    </label>
+                  </div>
+                </article>
+
+                <!-- 7D: Amenities Manager -->
+                <article class="admin-card cms-group-card" data-cms-card="amenities">
+                  <div class="card-head-inline">
+                    <div>
+                      <p class="eyebrow">04 · AMENITIES (AMENITIES.HTML)</p>
+                      <h3>Included Comforts</h3>
+                    </div>
+                    <button id="addAmenityBtn" class="admin-btn-outline" type="button">
+                      + Add Amenity
+                    </button>
+                  </div>
+                  <div id="cmsAmenitiesList" class="cms-repeat-list"></div>
+                </article>
+
+                <!-- 7E: House Rules & FAQ -->
+                <article class="admin-card cms-group-card" data-cms-card="rules">
+                  <p class="eyebrow">05 · RULES &amp; FAQ (FAQ.HTML)</p>
+                  <h3>House Rules &amp; Answers</h3>
+                  <div class="settings-form-grid">
+                    <label class="full-span">
+                      FAQ Hero Subtitle
+                      <input id="cmsFaqHeroSubtext" type="text" />
+                    </label>
+                  </div>
+                  <div class="card-head-inline" style="margin-top:16px">
+                    <h4>House Rules</h4>
+                    <button id="addRuleBtn" class="admin-btn-outline" type="button">
+                      + Add Rule
+                    </button>
+                  </div>
+                  <div id="cmsRulesList" class="cms-repeat-list"></div>
+                  <div class="card-head-inline" style="margin-top:20px">
+                    <h4>Frequently Asked Questions</h4>
+                    <button id="addFaqBtn" class="admin-btn-outline" type="button">
+                      + Add FAQ
+                    </button>
+                  </div>
+                  <div id="cmsFaqsList" class="cms-repeat-list"></div>
+                </article>
+
+                <!-- 7F: Blog Field Notes & Cover Photos -->
+                <article class="admin-card cms-group-card" data-cms-card="blog">
+                  <div class="card-head-inline">
+                    <div>
+                      <p class="eyebrow">06 · BLOG (BLOG.HTML)</p>
+                      <h3>Field Notes &amp; Cover Photos</h3>
+                    </div>
+                    <button id="addBlogBtn" class="admin-btn-outline" type="button">
+                      + Add Article
+                    </button>
+                  </div>
+                  <div class="settings-form-grid">
+                    <label class="full-span">
+                      Blog Hero Subtitle
+                      <input id="cmsBlogHeroSubtext" type="text" />
+                    </label>
+                  </div>
+                  <div id="cmsBlogPostsEditor" class="cms-repeat-list"></div>
+                </article>
+
+                <!-- 7G: Gallery Photographs & Framing -->
+                <article class="admin-card cms-group-card" data-cms-card="gallery">
+                  <div class="card-head-inline">
+                    <div>
+                      <p class="eyebrow">07 · PHOTO GALLERY (GALLERY.HTML)</p>
+                      <h3>Gallery Photographs</h3>
+                    </div>
+                    <button id="addGalleryPhotoBtn" class="admin-btn-outline" type="button">
+                      + Add Gallery Photo
+                    </button>
+                  </div>
+                  <div class="settings-form-grid">
+                    <label class="full-span">
+                      Gallery Helper Note
+                      <input id="cmsGalleryHelper" type="text" />
+                    </label>
+                  </div>
+                  <div id="cmsGalleryItemsEditor" class="cms-repeat-list"></div>
+                </article>
+              </div>
+            </section>
+
+            <!-- SECTION 8: BLOCKED LOG, GUESTS, TEMPLATES, REPORTS & DATA/BACKUP -->
+            <section
+              id="panel-reports"
+              class="workspace-panel"
+              data-panel-view="reports"
+              data-owner-only="true"
+              hidden
+            >
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">08 · LOGS, DIRECTORY, TEMPLATES, REPORTS &amp; BACKUP</p>
+                  <h2>Operations &amp; Reports</h2>
+                </div>
+              </div>
+
+              <div id="opsSubTabs" class="filter-tabs" role="tablist">
+                <button class="admin-pill is-active" type="button" data-ops-view="all">
+                  All Tools
+                </button>
+                <button class="admin-pill" type="button" data-ops-view="blocked">
+                  Blocked Log
+                </button>
+                <button class="admin-pill" type="button" data-ops-view="guests">
+                  Guests
+                </button>
+                <button class="admin-pill" type="button" data-ops-view="templates">
+                  Message Templates
+                </button>
+                <button class="admin-pill" type="button" data-ops-view="reports">
+                  Reports &amp; CSV
+                </button>
+                <button class="admin-pill" type="button" data-ops-view="backup">
+                  Data &amp; Backup
+                </button>
+              </div>
+
+              <!-- 8A: Blocked Log -->
+              <article id="ops-blocked" class="admin-card ops-card">
+                <div class="card-head-inline">
+                  <div>
+                    <p class="eyebrow">8A · GATE BLOCKED LOG</p>
+                    <h3>Bachelor / Stag Attempts Stopped by Gate</h3>
+                  </div>
+                  <div class="panel-actions-row">
+                    <button id="seedBlockedBtn" class="admin-btn-outline" type="button">
+                      Seed 2 Samples
+                    </button>
+                    <button id="clearBlockedBtn" class="admin-btn-outline" type="button">
+                      Clear Log
+                    </button>
+                  </div>
+                </div>
+                <div class="table-frame">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Group Size</th>
+                        <th>Guest Type / Counts</th>
+                        <th>Purpose</th>
+                        <th>Result</th>
+                        <th>Gate Reason</th>
+                      </tr>
+                    </thead>
+                    <tbody id="blockedLogRows"></tbody>
+                  </table>
+                </div>
+              </article>
+
+              <!-- 8B: Guests Directory -->
+              <article id="ops-guests" class="admin-card ops-card">
+                <div class="card-head-inline">
+                  <div>
+                    <p class="eyebrow">8B · GUEST DIRECTORY &amp; BLACKLIST</p>
+                    <h3>Guests</h3>
+                  </div>
+                  <input
+                    id="guestSearch"
+                    class="admin-search-input"
+                    type="search"
+                    placeholder="Filter guests by name or phone..."
+                    aria-label="Filter guests"
+                  />
+                </div>
+                <div class="table-frame">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Guest Name</th>
+                        <th>Phone</th>
+                        <th>Total Requests / Stays</th>
+                        <th>Latest Stay Dates</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="guestsRows"></tbody>
+                  </table>
+                </div>
+              </article>
+
+              <!-- 8C: WhatsApp Message Templates -->
+              <article id="ops-templates" class="admin-card ops-card">
+                <p class="eyebrow">8C · WHATSAPP MESSAGE TEMPLATES</p>
+                <h3>Approval &amp; Decline Reply Templates</h3>
+                <p class="small-note">
+                  Available placeholders: <code>{name}</code>, <code>{checkin}</code>,
+                  <code>{checkout}</code>, <code>{amount}</code> (plus <code>{reason}</code> for declines).
+                </p>
+                <form id="templatesForm" class="settings-form-grid">
+                  <label class="full-span">
+                    Approval Message Template
+                    <textarea id="tplApprove" rows="3" required></textarea>
+                  </label>
+                  <div class="full-span template-preview">
+                    <strong>Preview (Approval):</strong>
+                    <span id="tplPreviewApprove"></span>
+                  </div>
+                  <label class="full-span">
+                    Decline Message Template
+                    <textarea id="tplDecline" rows="3" required></textarea>
+                  </label>
+                  <div class="full-span template-preview">
+                    <strong>Preview (Decline):</strong>
+                    <span id="tplPreviewDecline"></span>
+                  </div>
+                  <div class="settings-form-footer">
+                    <button id="saveTemplatesBtn" class="button" type="submit">
+                      Save Templates
+                      <span>↗</span>
+                    </button>
+                    <button id="resetTemplatesBtn" class="admin-btn-outline" type="button">
+                      Reset Defaults
+                    </button>
+                    <span id="templatesStatus" class="form-status-msg" role="status"></span>
+                  </div>
+                </form>
+              </article>
+
+              <!-- 8D: Reports & CSV -->
+              <article id="ops-reports" class="admin-card ops-card">
+                <div class="card-head-inline">
+                  <div>
+                    <p class="eyebrow">8D · MONTHLY SUMMARY</p>
+                    <h3>Reports</h3>
+                  </div>
+                  <button id="downloadCsvBtn" class="button" type="button">
+                    Download Bookings CSV
+                    <span>↗</span>
+                  </button>
+                </div>
+                <div class="table-frame">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Month</th>
+                        <th>Approved Bookings</th>
+                        <th>Total Nights</th>
+                        <th>Expected Income (₹)</th>
+                      </tr>
+                    </thead>
+                    <tbody id="reportsRows"></tbody>
+                    <tfoot id="reportsTotalFooter"></tfoot>
+                  </table>
+                </div>
+              </article>
+
+              <!-- 8E: Data & Backup -->
+              <article id="ops-backup" class="admin-card ops-card">
+                <p class="eyebrow">8E · DATA &amp; BACKUP</p>
+                <h3>Browser Storage Snapshot &amp; Portability</h3>
+                <p id="backupStats" class="small-note"></p>
+                <div class="panel-actions-row" style="flex-wrap:wrap">
+                  <button id="exportBackupBtn" class="button" type="button">
+                    Export Full Backup JSON
+                    <span>↗</span>
+                  </button>
+                  <button id="importBackupBtn" class="admin-btn-outline" type="button">
+                    Import Backup JSON
+                  </button>
+                  <input
+                    id="importBackupFile"
+                    type="file"
+                    accept=".json,application/json"
+                    hidden
+                  />
+                  <button id="resetAllDemoBtn" class="admin-btn-danger" type="button">
+                    Reset All Demo Data
+                  </button>
+                </div>
+                <p id="backupStatus" class="form-status-msg" role="status"></p>
+              </article>
+            </section>
+
+            <section class="owner-reminder">
+              <span class="reminder-mark">KT</span>
+              <div>
+                <p class="eyebrow">CHECK-IN REMINDER</p>
+                <p>
+                  Verify guest IDs against the approved guest list. A refundable
+                  security deposit applies. No parties or outside guests.
+                </p>
+              </div>
+            </section>
           </div>
-          <div class="table-frame">
-            <table>
-              <thead>
-                <tr>
-                  <th>Reference / received</th>
-                  <th>Lead guest / ID</th>
-                  <th>Group / purpose</th>
-                  <th>Dates</th>
-                  <th>Gate review</th>
-                  <th>Owner decision</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="rows"></tbody>
-            </table>
+        </div>
+      </div>
+
+        <!-- Request Detail Modal -->
+        <div id="detailModal" class="id-modal-backdrop" hidden>
+          <div class="id-modal-box detail-modal-box">
+            <div class="id-modal-header">
+              <h3>Booking Request Details</h3>
+              <button
+                type="button"
+                class="id-modal-close"
+                id="detailModalCloseBtn"
+                aria-label="Close details"
+              >
+                ✕
+              </button>
+            </div>
+            <div class="id-modal-body detail-modal-body">
+              <div id="detailModalBody"></div>
+              <div class="detail-notes-box">
+                <label>
+                  Internal Host Notes (saved locally)
+                  <textarea
+                    id="detailNotesInput"
+                    rows="3"
+                    placeholder="Add check-in instructions, call notes, special requests..."
+                  ></textarea>
+                </label>
+                <div class="panel-actions-row">
+                  <button id="saveDetailNoteBtn" class="admin-btn-outline" type="button">
+                    Save Notes
+                  </button>
+                  <span id="detailNoteStatus" class="form-status-msg"></span>
+                </div>
+              </div>
+              <div class="detail-modal-actions">
+                <button id="detailApproveBtn" class="button" type="button">
+                  Approve Stay
+                </button>
+                <button id="detailDeclineBtn" class="admin-btn-danger" type="button">
+                  Decline with Reason
+                </button>
+                <button id="detailWaBtn" class="admin-btn-wa" type="button">
+                  WhatsApp Guest ↗
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="dashboard-bottom">
-            <p>Two sample requests load when this panel is empty.</p>
-            <button class="button text-button" id="clearBtn" type="button">
-              Clear all requests
-              <span>↗</span>
-            </button>
+        </div>
+
+        <!-- Decline Reason Modal -->
+        <div id="declineModal" class="id-modal-backdrop modal-stack-top" hidden>
+          <div class="id-modal-box decline-modal-box">
+            <div class="id-modal-header">
+              <h3>Decline Booking Request</h3>
+              <button
+                type="button"
+                class="id-modal-close"
+                id="declineModalCloseBtn"
+                aria-label="Close decline form"
+              >
+                ✕
+              </button>
+            </div>
+            <div class="id-modal-body detail-modal-body">
+              <p id="declineReqMeta" class="small-note"></p>
+              <form id="declineForm" class="stacked-form">
+                <label>
+                  Reason for Decline
+                  <select id="declineReasonSelect" required>
+                    <option value="">Choose a reason</option>
+                    <option value="Bachelor/stag group">Bachelor/stag group</option>
+                    <option value="Dates unavailable">Dates unavailable</option>
+                    <option value="House full">House full</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </label>
+                <label>
+                  Additional detail (optional)
+                  <input
+                    id="declineReasonNote"
+                    type="text"
+                    placeholder="e.g. Reserved for family maintenance that week"
+                  />
+                </label>
+                <div class="panel-actions-row">
+                  <button class="button" type="submit">
+                    Confirm Decline
+                  </button>
+                  <button id="declineCancelBtn" class="admin-btn-outline" type="button">
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </section>
-        <section class="owner-reminder">
-          <span class="reminder-mark">KT</span>
-          <div>
-            <p class="eyebrow">CHECK-IN REMINDER</p>
-            <p>
-              Verify guest IDs against the approved guest list. A refundable
-              security deposit applies. No parties or outside guests.
-            </p>
-          </div>
-        </section>
+        </div>
+
         <!-- ID Photo Preview Modal -->
-        <div id="idModal" class="id-modal-backdrop" hidden>
+        <div id="idModal" class="id-modal-backdrop modal-stack-top" hidden>
           <div class="id-modal-box">
             <div class="id-modal-header">
               <h3 id="idModalTitle">Guest ID Document</h3>
-              <button type="button" class="id-modal-close" id="idModalCloseBtn" aria-label="Close">✕</button>
+              <button
+                type="button"
+                class="id-modal-close"
+                id="idModalCloseBtn"
+                aria-label="Close"
+              >
+                ✕
+              </button>
             </div>
             <div class="id-modal-body">
               <img id="idModalImg" src="" alt="Guest ID Document" />
@@ -169,6 +1310,7 @@
         </div>
       </section>
     </main>
+
     <footer class="site-footer">
       <div class="footer-main">
         <div class="footer-brand">
@@ -211,7 +1353,7 @@
         <span>Owner-approved stays · No instant payment</span>
       </div>
     </footer>
-    <script src="js/data.js"></script>
-    <script src="js/admin.js"></script>
+    <script src="js/data.js?v=20261111"></script>
+    <script src="js/admin.js?v=20261111"></script>
   </body>
 </html>

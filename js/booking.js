@@ -51,6 +51,30 @@ $("step1").addEventListener("submit", (event) => {
   const box = $("gateResult");
   box.style.display = "block";
   if (gate.status === "BLOCKED") {
+    try {
+      const logKey = "kt_blocked_log";
+      const existingRaw = JSON.parse(localStorage.getItem(logKey) || "null");
+      const existing = Array.isArray(existingRaw) ? existingRaw : [];
+      const menCount = Number(step1Data.men) || 0;
+      const womenCount = Number(step1Data.women) || 0;
+      const childCount = Number(step1Data.children) || 0;
+      existing.unshift({
+        id: "BLK-" + Date.now().toString().slice(-6),
+        date: getLocalTodayIso(),
+        time: new Date().toLocaleString("en-IN"),
+        groupSize: menCount + womenCount + childCount,
+        men: menCount,
+        women: womenCount,
+        children: childCount,
+        guestType: step1Data.guestType,
+        purpose: step1Data.purpose,
+        result: "BLOCKED",
+        reason: gate.reason,
+      });
+      localStorage.setItem(logKey, JSON.stringify(existing));
+    } catch {
+      // Never interrupt the gate UX if localStorage is unavailable or full.
+    }
     box.className = "result block";
     box.textContent = gate.message;
     $("step2").style.display = "none";
@@ -158,6 +182,18 @@ if (bookingContact) {
     : SITE.whatsapp;
   bookingContact.textContent = "Owner WhatsApp: " + formattedWa;
 }
+document.querySelectorAll(".field-hint").forEach((hint) => {
+  if (/Max \d+ guests accommodated/i.test(hint.textContent)) {
+    hint.textContent = `Max ${MAX_GUESTS} guests accommodated`;
+  } else if (/Check-in from/i.test(hint.textContent)) {
+    hint.textContent = `Check-in from ${SITE.checkIn} · Check-out by ${SITE.checkOut}`;
+  }
+});
+document.querySelectorAll(".aside-timeline li .step-desc p").forEach((p) => {
+  if (/Direct communication within/i.test(p.textContent)) {
+    p.textContent = `Direct communication within ${SITE.approvalHours} hours to confirm dates and needs.`;
+  }
+});
 
 // ============================================================
 // GUEST COUNTER STEPPERS & REAL-TIME SUMMARY

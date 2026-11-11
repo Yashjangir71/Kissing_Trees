@@ -23,9 +23,11 @@ const SITE = {
   includedGuests: 6, // SAMPLE
   extraGuestCharge: 750, // SAMPLE ₹ per extra guest / night
   securityDeposit: 5000, // SAMPLE ₹ refundable
+  minNights: 1, // SAMPLE minimum stay nights
   approvalHours: "2–4", // owner replies within 2–4 hours
-  // SAMPLE demo gate only. These values are visible in page source and are NOT secure credentials.
-  adminDemo: { username: "owner-demo", password: "KT-SAMPLE-2026" },
+  chatLogoSrc: "assets/cottage-chat-logo.png",
+  // DEMO login credential only. Real authentication must run on a backend server.
+  adminDemo: { username: "owner-demo", password: "admin123" },
   amenities: [
     ["🌐", "High-speed Wi-Fi"],
     ["❄️", "AC Bedrooms"],
@@ -50,6 +52,95 @@ const SITE = {
     return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
   },
 };
+
+const SITE_DEFAULTS = {
+  name: SITE.name,
+  tagline: SITE.tagline,
+  location: SITE.location,
+  nearbyLandscape: SITE.nearbyLandscape,
+  whatsapp: SITE.whatsapp,
+  email: SITE.email,
+  socials: { ...SITE.socials },
+  maxGuests: SITE.maxGuests,
+  checkIn: SITE.checkIn,
+  checkOut: SITE.checkOut,
+  tariff: { ...SITE.tariff },
+  includedGuests: SITE.includedGuests,
+  extraGuestCharge: SITE.extraGuestCharge,
+  securityDeposit: SITE.securityDeposit,
+  minNights: SITE.minNights,
+  approvalHours: SITE.approvalHours,
+  chatLogoSrc: SITE.chatLogoSrc,
+  amenities: SITE.amenities.map((item) => [...item]),
+};
+
+function isSafeImageSrc(src) {
+  if (typeof src !== "string") return false;
+  const trimmed = src.trim();
+  if (!trimmed) return false;
+  return /^(?:\.?\/?assets\/[a-zA-Z0-9_./-]+(?:\?[a-zA-Z0-9=&_-]+)?|https?:\/\/[^\s"'()<>]+|data:image\/[a-zA-Z0-9+.+-]+;base64,[A-Za-z0-9+/=]+)$/.test(
+    trimmed,
+  );
+}
+
+// Apply saved localStorage pricing & CMS identity overrides (demo mode only).
+(function hydrateSiteFromLocalStorage() {
+  try {
+    if (typeof localStorage === "undefined") return;
+    const rawSettings = JSON.parse(localStorage.getItem("kt_settings") || "null");
+    if (rawSettings && typeof rawSettings === "object" && !Array.isArray(rawSettings)) {
+      const toNum = (v, min = 0) => {
+        const n = Number(v);
+        return Number.isFinite(n) && n >= min ? n : null;
+      };
+      const wd = toNum(rawSettings.weekday, 0);
+      const we = toNum(rawSettings.weekend, 0);
+      const se = toNum(rawSettings.season, 0);
+      const inc = toNum(rawSettings.includedGuests, 1);
+      const ex = toNum(rawSettings.extraGuestCharge, 0);
+      const dep = toNum(rawSettings.securityDeposit, 0);
+      const mn = toNum(rawSettings.minNights, 1);
+      if (wd !== null) SITE.tariff.weekday = wd;
+      if (we !== null) SITE.tariff.weekend = we;
+      if (se !== null) SITE.tariff.season = se;
+      if (inc !== null) SITE.includedGuests = inc;
+      if (ex !== null) SITE.extraGuestCharge = ex;
+      if (dep !== null) SITE.securityDeposit = dep;
+      if (mn !== null) SITE.minNights = mn;
+    }
+
+    const rawCms = JSON.parse(localStorage.getItem("kt_cms") || "null");
+    if (rawCms && typeof rawCms === "object" && rawCms.site && typeof rawCms.site === "object") {
+      const s = rawCms.site;
+      const str = (v) => (typeof v === "string" && v.trim() ? v.trim() : null);
+      if (str(s.name)) SITE.name = str(s.name);
+      if (str(s.tagline)) SITE.tagline = str(s.tagline);
+      if (str(s.location)) SITE.location = str(s.location);
+      if (str(s.nearbyLandscape)) SITE.nearbyLandscape = str(s.nearbyLandscape);
+      if (str(s.whatsapp)) SITE.whatsapp = str(s.whatsapp);
+      if (str(s.email)) SITE.email = str(s.email);
+      if (str(s.checkIn)) SITE.checkIn = str(s.checkIn);
+      if (str(s.checkOut)) SITE.checkOut = str(s.checkOut);
+      if (str(s.approvalHours)) SITE.approvalHours = str(s.approvalHours);
+      if (isSafeImageSrc(s.chatLogoSrc)) SITE.chatLogoSrc = s.chatLogoSrc.trim();
+      const maxG = Number(s.maxGuests);
+      if (Number.isFinite(maxG) && maxG >= 1) SITE.maxGuests = maxG;
+      if (s.socials && typeof s.socials === "object") {
+        if (str(s.socials.instagram)) SITE.socials.instagram = str(s.socials.instagram);
+        if (str(s.socials.x)) SITE.socials.x = str(s.socials.x);
+        if (str(s.socials.facebook)) SITE.socials.facebook = str(s.socials.facebook);
+      }
+      if (Array.isArray(rawCms.amenities) && rawCms.amenities.length) {
+        const cleaned = rawCms.amenities
+          .filter((a) => Array.isArray(a) && String(a[1] || "").trim())
+          .map((a) => [String(a[0] || "✦").trim(), String(a[1]).trim()]);
+        if (cleaned.length) SITE.amenities = cleaned;
+      }
+    }
+  } catch {
+    // Ignore invalid JSON or unavailable storage.
+  }
+})();
 
 // Keep shared property identity consistent on every static page.
 (function () {
@@ -201,8 +292,15 @@ const SITE = {
     whatsapp.target = whatsappNumber.length >= 10 ? "_blank" : "_self";
     whatsapp.rel = "noopener";
     whatsapp.setAttribute("aria-label", "Chat with Kissing Trees on WhatsApp");
-    whatsapp.innerHTML =
-      '<img src="assets/cottage-chat-logo.png" alt="Chat with Kissing Trees on WhatsApp"><strong>Click to chat</strong>';
+    const waImg = document.createElement("img");
+    waImg.src = isSafeImageSrc(SITE.chatLogoSrc)
+      ? SITE.chatLogoSrc
+      : "assets/cottage-chat-logo.png";
+    waImg.alt = "Chat with Kissing Trees on WhatsApp";
+    const waStrong = document.createElement("strong");
+    waStrong.textContent = "Click to chat";
+    whatsapp.appendChild(waImg);
+    whatsapp.appendChild(waStrong);
     document.body.appendChild(whatsapp);
   }
 })();
